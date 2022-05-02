@@ -3,3 +3,4 @@ csvkit
 jupyter
 pandas
 pylint
+requests
