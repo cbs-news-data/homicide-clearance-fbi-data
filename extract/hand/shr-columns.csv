@@ -1,4 +1,4 @@
-start,end,len,name,desc
+start,end,length,column,desc
 1,1,1,shr_id,Identifier for SHR master file
 2,3,2,state_code,Numeric state code
 4,10,7,ori_code,Originating agency ID
