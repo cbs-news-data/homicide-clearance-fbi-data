@@ -36,7 +36,7 @@ The python files in [scripts/](scripts/) are used to run various stages of the w
 
 ### [Documents](static/)
 
-[Documents/documents/](documents/) contains PDF files that are not part of the workflow itself but were used in its creation, for example the fixed-with file schemas used in [extract/](extract/).
+[documents/](documents/) contains PDF files that are not part of the workflow itself but were used in its creation, for example the fixed-with file schemas used in [extract/](extract/).
 
 ## How to reproduce
 
