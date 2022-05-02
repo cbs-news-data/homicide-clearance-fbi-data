@@ -6,6 +6,8 @@ This repository contains the code for CBS News' 2022 analysis of FBI data relate
 
 This repository uses [Make](https://www.gnu.org/software/make/) to create a workflow that can be easily reproduced with a single command. 
 
+### Tasks
+
 The project is divided into tasks, each of which is contained in its own directory:
 
 | Task folder         | Description                                                                |
