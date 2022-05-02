@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-SUBDIRS := extract
+TASKS := extract
 
 .PHONY: \
 	all \
@@ -7,11 +7,11 @@ SUBDIRS := extract
 	clean \
 	clean-raw \
 	clean-output \
-	$(SUBDIRS)
+	$(TASKS)
 
-all: $(SUBDIRS)
+all: $(TASKS)
 
-$(SUBDIRS): venv/bin/activate
+$(TASKS): venv/bin/activate
 	source $< && $(MAKE) -C $@
 
 raw: scripts/cde_download.py
@@ -30,6 +30,6 @@ clean-raw:
 	find . -wholename "./raw/*/*" -type f -delete
 
 clean-output:
-	for d in $(SUBDIRS) ; do \
+	for d in $(TASKS) ; do \
 		cd "$(shell pwd)/$$d" && make clean  ; \
 	done
