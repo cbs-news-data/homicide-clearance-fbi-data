@@ -1,0 +1,153 @@
+start,end,name,desc
+1,1,shr_id,Identifier for SHR master file
+2,3,state_code,Numeric state code
+4,10,ori_code,Originating agency ID
+11,12,geo_group,MSA or other geographic grouping
+13,13,division,Geographic division
+14,15,year,Year the data reflects
+16,24,population,Total population for the agency for the year reported
+25,27,county,County code in which the city is located
+28,30,msa,Metropolitan Statistical Area number in which the city is located
+31,31,msa_ind,Suburban vs. non-suburban
+32,55,agency_name,Agency name
+56,61,state_name,State name
+62,63,offense_month,The month (1-12) in which the offense occurred
+64,69,last_update,The date the record was last updated
+70,70,action_type,The type of action on the record
+71,71,homicide,The type of offense (Murder and non-negligent manslaughter vs. manslaughter by negligence)
+72,74,incident_number,A unique number that distinguishes one incident from another within the ORI
+75,75,situation,Describes the data relative to the number of victims/offenders in each incident
+76,77,victim_age,The age of the victim
+78,78,victim_sex,The sex of the victim
+79,79,victim_race,The race of the victim
+80,80,victim_ethnicity,The ethnicity of the victim
+81,82,offender_age,The age of the offender
+83,83,offender_sex,The sex of the offender
+84,84,offender_race,The race of the offender
+85,85,offender_ethnicity,The ethnicity of the offender
+86,87,offender_weapon_used,The weapon used by the offender
+88,89,offender_relationship,The relationship between the victim and offender
+90,91,offender_circumstance,The circumstances under which the incident occurred
+92,92,offender_subcircumstance,Additional detail type used for certain circumstance codes
+93,95,victim_count,"The number of additional victims, if any"
+96,98,offender_count,"The number of additional offenders, if any"
+99,100,victim2_age,"The age of victim 2, if applicable"
+101,101,victim2_sex,"The sex of victim 2, if applicable"
+102,102,victim2_race,"The race of victim 2, if applicable"
+103,103,victim2_ethnicity,"The ethnicity of victim 2, if applicable"
+104,105,victim3_age,"The age of victim 3, if applicable"
+106,106,victim3_sex,"The sex of victim 3, if applicable"
+107,107,victim3_race,"The race of victim 3, if applicable"
+108,108,victim3_ethnicity,"The ethnicity of victim 3, if applicable"
+109,110,victim4_age,"The age of victim 4, if applicable"
+111,111,victim4_sex,"The sex of victim 4, if applicable"
+112,112,victim4_race,"The race of victim 4, if applicable"
+113,113,victim4_ethnicity,"The ethnicity of victim 4, if applicable"
+114,115,victim5_age,"The age of victim 5, if applicable"
+116,116,victim5_sex,"The sex of victim 5, if applicable"
+117,117,victim5_race,"The race of victim 5, if applicable"
+118,118,victim5_ethnicity,"The ethnicity of victim 5, if applicable"
+119,120,victim6_age,"The age of victim 6, if applicable"
+121,121,victim6_sex,"The sex of victim 6, if applicable"
+122,122,victim6_race,"The race of victim 6, if applicable"
+123,123,victim6_ethnicity,"The ethnicity of victim 6, if applicable"
+124,125,victim7_age,"The age of victim 7, if applicable"
+126,126,victim7_sex,"The sex of victim 7, if applicable"
+127,127,victim7_race,"The race of victim 7, if applicable"
+128,128,victim7_ethnicity,"The ethnicity of victim 7, if applicable"
+129,130,victim8_age,"The age of victim 8, if applicable"
+131,131,victim8_sex,"The sex of victim 8, if applicable"
+132,132,victim8_race,"The race of victim 8, if applicable"
+133,133,victim8_ethnicity,"The ethnicity of victim 8, if applicable"
+134,135,victim9_age,"The age of victim 9, if applicable"
+136,136,victim9_sex,"The sex of victim 9, if applicable"
+137,137,victim9_race,"The race of victim 9, if applicable"
+138,138,victim9_ethnicity,"The ethnicity of victim 9, if applicable"
+139,140,victim10_age,"The age of victim 10, if applicable"
+141,141,victim10_sex,"The sex of victim 10, if applicable"
+142,142,victim10_race,"The race of victim 10, if applicable"
+143,143,victim10_ethnicity,"The ethnicity of victim 10, if applicable"
+144,145,victim11_age,"The age of victim 11, if applicable"
+146,146,victim11_sex,"The sex of victim 11, if applicable"
+147,147,victim11_race,"The race of victim 11, if applicable"
+148,148,victim11_ethnicity,"The ethnicity of victim 11, if applicable"
+149,150,offender2_age,"The age of offender 2, if applicable"
+151,151,offender2_sex,"The sex of offender 2, if applicable"
+152,152,offender2_race,"The race of offender 2, if applicable"
+153,153,offender2_ethnicity,"The ethnicity of offender 2, if applicable"
+154,155,offender2_weapon,"The weapon of offender 2, if applicable"
+156,157,offender2_relationship,"The relationship of offender 2, if applicable"
+158,159,offender2_circumstance,"The circumstance of offender 2, if applicable"
+160,160,offender2_subcircumstance,"The subcircumstance of offender 2, if applicable"
+161,162,offender3_age,"The age of offender 3, if applicable"
+163,163,offender3_sex,"The sex of offender 3, if applicable"
+164,164,offender3_race,"The race of offender 3, if applicable"
+165,165,offender3_ethnicity,"The ethnicity of offender 3, if applicable"
+166,167,offender3_weapon,"The weapon of offender 3, if applicable"
+168,169,offender3_relationship,"The relationship of offender 3, if applicable"
+170,171,offender3_circumstance,"The circumstance of offender 3, if applicable"
+172,172,offender3_subcircumstance,"The subcircumstance of offender 3, if applicable"
+173,174,offender4_age,"The age of offender 4, if applicable"
+175,175,offender4_sex,"The sex of offender 4, if applicable"
+176,176,offender4_race,"The race of offender 4, if applicable"
+177,177,offender4_ethnicity,"The ethnicity of offender 4, if applicable"
+178,179,offender4_weapon,"The weapon of offender 4, if applicable"
+180,181,offender4_relationship,"The relationship of offender 4, if applicable"
+182,183,offender4_circumstance,"The circumstance of offender 4, if applicable"
+184,184,offender4_subcircumstance,"The subcircumstance of offender 4, if applicable"
+185,186,offender5_age,"The age of offender 5, if applicable"
+187,187,offender5_sex,"The sex of offender 5, if applicable"
+188,188,offender5_race,"The race of offender 5, if applicable"
+189,189,offender5_ethnicity,"The ethnicity of offender 5, if applicable"
+190,191,offender5_weapon,"The weapon of offender 5, if applicable"
+192,193,offender5_relationship,"The relationship of offender 5, if applicable"
+194,195,offender5_circumstance,"The circumstance of offender 5, if applicable"
+196,196,offender5_subcircumstance,"The subcircumstance of offender 5, if applicable"
+197,198,offender6_age,"The age of offender 6, if applicable"
+199,199,offender6_sex,"The sex of offender 6, if applicable"
+200,200,offender6_race,"The race of offender 6, if applicable"
+201,201,offender6_ethnicity,"The ethnicity of offender 6, if applicable"
+202,203,offender6_weapon,"The weapon of offender 6, if applicable"
+204,205,offender6_relationship,"The relationship of offender 6, if applicable"
+206,207,offender6_circumstance,"The circumstance of offender 6, if applicable"
+208,208,offender6_subcircumstance,"The subcircumstance of offender 6, if applicable"
+209,210,offender7_age,"The age of offender 7, if applicable"
+211,211,offender7_sex,"The sex of offender 7, if applicable"
+212,212,offender7_race,"The race of offender 7, if applicable"
+213,213,offender7_ethnicity,"The ethnicity of offender 7, if applicable"
+214,215,offender7_weapon,"The weapon of offender 7, if applicable"
+216,217,offender7_relationship,"The relationship of offender 7, if applicable"
+218,219,offender7_circumstance,"The circumstance of offender 7, if applicable"
+220,220,offender7_subcircumstance,"The subcircumstance of offender 7, if applicable"
+221,222,offender8_age,"The age of offender 8, if applicable"
+223,223,offender8_sex,"The sex of offender 8, if applicable"
+224,224,offender8_race,"The race of offender 8, if applicable"
+225,225,offender8_ethnicity,"The ethnicity of offender 8, if applicable"
+226,227,offender8_weapon,"The weapon of offender 8, if applicable"
+228,229,offender8_relationship,"The relationship of offender 8, if applicable"
+230,231,offender8_circumstance,"The circumstance of offender 8, if applicable"
+232,232,offender8_subcircumstance,"The subcircumstance of offender 8, if applicable"
+233,234,offender9_age,"The age of offender 9, if applicable"
+235,235,offender9_sex,"The sex of offender 9, if applicable"
+236,236,offender9_race,"The race of offender 9, if applicable"
+237,237,offender9_ethnicity,"The ethnicity of offender 9, if applicable"
+238,239,offender9_weapon,"The weapon of offender 9, if applicable"
+240,241,offender9_relationship,"The relationship of offender 9, if applicable"
+242,243,offender9_circumstance,"The circumstance of offender 9, if applicable"
+244,244,offender9_subcircumstance,"The subcircumstance of offender 9, if applicable"
+245,246,offender10_age,"The age of offender 10, if applicable"
+247,247,offender10_sex,"The sex of offender 10, if applicable"
+248,248,offender10_race,"The race of offender 10, if applicable"
+249,249,offender10_ethnicity,"The ethnicity of offender 10, if applicable"
+250,251,offender10_weapon,"The weapon of offender 10, if applicable"
+252,253,offender10_relationship,"The relationship of offender 10, if applicable"
+254,255,offender10_circumstance,"The circumstance of offender 10, if applicable"
+256,256,offender10_subcircumstance,"The subcircumstance of offender 10, if applicable"
+257,258,offender11_age,"The age of offender 11, if applicable"
+259,259,offender11_sex,"The sex of offender 11, if applicable"
+260,260,offender11_race,"The race of offender 11, if applicable"
+261,261,offender11_ethnicity,"The ethnicity of offender 11, if applicable"
+262,263,offender11_weapon,"The weapon of offender 11, if applicable"
+264,265,offender11_relationship,"The relationship of offender 11, if applicable"
+266,267,offender11_circumstance,"The circumstance of offender 11, if applicable"
+268,268,offender11_subcircumstance,"The subcircumstance of offender 11, if applicable"
