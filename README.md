@@ -12,7 +12,7 @@ The project is divided into tasks, each of which is contained in its own directo
 
 | Task folder         | Description                                                                |
 | ------------------- | -------------------------------------------------------------------------- |
-| [Extract](Extract/) | Turns the raw annual fixed-width files from the FBI into single csv files. |
+| [Extract](extract/) | Turns the raw annual fixed-width files from the FBI into single csv files. |
 
 *On GitHub, navigate to each task folder for additional documentation of that task.*
 
