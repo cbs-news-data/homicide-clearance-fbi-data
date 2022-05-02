@@ -1,4 +1,4 @@
-"""downloads supplementary homicide report documents from 1985-present to raw/"""
+"""downloads supplementary homicide report documents from 1985-present to raw/shr"""
 
 from io import BytesIO
 import zipfile
