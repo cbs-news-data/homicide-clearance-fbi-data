@@ -4,7 +4,14 @@ GENERATED_FILES: output/shr_master.csv
 
 all: $(GENERATED_FILES)
 
-.PHONY: all cleanup
+.PHONY: all input cleanup
+
+input:
+	cd input ; \
+	rm * ; \
+	for file in $$(ls -d ../../../raw/shr/*) ; do \
+		ln -sf $$file ; \
+	done
 
 output/shr_master.csv: \
 		hand/fwf-schema.csv \
