@@ -21,5 +21,5 @@ output/shr_master.csv: \
 	done; \
 	echo "Successfully extracted and merged $$(cat $@ | wc -l) rows to $@" > output/extract.log
 
-cleanup:
+clean:
 	rm -f output/*

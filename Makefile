@@ -16,7 +16,11 @@ venv/bin/activate: requirements.txt
 	source $@ && pip install -r $<
 	touch $@
 
-cleanup:
+clean:
+	make clean-outputs
+	find . -wholename "./raw/*/*" -type f -delete
+
+clean-output:
 	for d in $(SUBDIRS) ; do \
-		cd "$(shell pwd)/$$d" && make cleanup  ; \
+		cd "$(shell pwd)/$$d" && make clean  ; \
 	done
