@@ -38,7 +38,7 @@ The python files in [scripts/](scripts/) are used to run various stages of the w
 
 ## How to reproduce
 
+*NOTE: This was created using Linux and uses Linux tools, so it will not work from windows unless you run it using [wsl](https://docs.microsoft.com/en-us/windows/wsl/about).*
+
 1. Run the steps to download the raw data as described above.
 2. Run `make`
-
-
