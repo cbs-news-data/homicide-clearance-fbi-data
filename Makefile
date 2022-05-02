@@ -1,14 +1,20 @@
 SHELL := /bin/bash
 SUBDIRS := extract
 
-.PHONY: all $(SUBDIRS)
+.PHONY: \
+	all \
+	raw \
+	clean \
+	clean-raw \
+	clean-output \
+	$(SUBDIRS)
 
 all: $(SUBDIRS)
 
 $(SUBDIRS): venv/bin/activate
 	source $< && $(MAKE) -C $@
 
-raw: scripts/download_shr.py
+raw: scripts/cde_download.py
 	python $<
 
 venv/bin/activate: requirements.txt
@@ -17,7 +23,10 @@ venv/bin/activate: requirements.txt
 	touch $@
 
 clean:
-	make clean-outputs
+	make clean-output
+	make clean-raw
+
+clean-raw:
 	find . -wholename "./raw/*/*" -type f -delete
 
 clean-output:
