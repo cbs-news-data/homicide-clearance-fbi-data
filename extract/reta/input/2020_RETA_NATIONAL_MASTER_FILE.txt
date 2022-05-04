@@ -1,0 +1,1 @@
+../../../raw/reta/2020_RETA_NATIONAL_MASTER_FILE.txt
