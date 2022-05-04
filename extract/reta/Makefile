@@ -21,9 +21,9 @@ output/reta_master.csv: \
 	@i=0 ; \
 	for file in $(wordlist 2, 999, $^) ; do \
 		if [ $$i == 0 ] ; then \
-			cat $$file | in2csv --schema $< > $@ ; \
+			cat $$file | in2csv --encoding ascii -f fixed --schema $< > $@ ; \
 		else \
-			cat $$file | in2csv --schema $< | awk "NR > 1" >> $@ ; \
+			cat $$file | in2csv --encoding ascii -f fixed --schema $< | awk "NR > 1" >> $@ ; \
 		fi ; \
 		echo EXTRACT FILE TO CSV $$file; \
 		i=$$((i+1)) ; \
