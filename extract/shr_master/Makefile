@@ -8,7 +8,9 @@ all: $(GENERATED_FILES)
 
 input:
 	cd input ; \
-	rm * ; \
+	if [[ $$(ls) != "" ]] ; then \
+		rm  * ; \
+	fi ; \
 	for file in $$(ls -d ../../../raw/shr/*) ; do \
 		ln -sf $$file ; \
 	done
