@@ -10,11 +10,12 @@ This repository uses [Make](https://www.gnu.org/software/make/) to create a work
 
 The project is divided into tasks, each of which is contained in its own directory:
 
-| Task folder         | Description                                                                |
-| ------------------- | -------------------------------------------------------------------------- |
-| [Extract](extract/) | Turns the raw annual fixed-width files from the FBI into single csv files. |
+| Task folder             | Description                                                                |
+| ----------------------- | -------------------------------------------------------------------------- |
+| [Extract](extract/)     | Turns the raw annual fixed-width files from the FBI into single csv files. |
+| [Transform](transform/) | Cleans the outputs of  extract tasks                                       |
 
-*On GitHub, navigate to each task folder for additional documentation of that task.*
+*View the README file in each task folder for additional documentation of that task.*
 
 ### [Raw Data](raw/)
 

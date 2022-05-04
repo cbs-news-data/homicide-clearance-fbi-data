@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-TASKS := extract
+TASKS := extract transform
 
 .PHONY: \
 	all \

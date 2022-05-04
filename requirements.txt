@@ -3,5 +3,6 @@ csvkit
 jupyter
 pandas
 pylint
+pyyaml
 remotezip
 tqdm
