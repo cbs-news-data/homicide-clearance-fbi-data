@@ -3,7 +3,7 @@
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "sqlite__temp.db",
+        "NAME": "output/sqlite__temp.db",
     }
 }
 
