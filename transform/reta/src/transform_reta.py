@@ -3,13 +3,13 @@ transforms the output of in2csv's parsing of the fixed-width files to more usabl
 """
 
 import logging
-import math
 import re
 import sys
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import yaml
+from utils import guess_n_loops
 
 logging.basicConfig(filename="output/transform.log", filemode="w", level=logging.INFO)
 
@@ -271,9 +271,7 @@ if __name__ == "__main__":
     CHUNKSIZE = 1000  # using a small chunksize as the resulting files are 600x taller
     ENCODING = "latin1"
 
-    # guess how many itereations are required for the progress bar and logging
-    with open(sys.argv[1], encoding=ENCODING) as file:
-        total_loops = math.ceil(sum(1 for _ in file) / CHUNKSIZE)
+    total_loops = guess_n_loops(sys.argv[1], CHUNKSIZE, ENCODING)
 
     chunks = pd.read_csv(
         sys.argv[1],
