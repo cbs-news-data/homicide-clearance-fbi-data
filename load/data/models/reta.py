@@ -13,4 +13,4 @@ class RetA(models.Model):
     month = models.CharField(max_length=3)
     card = models.CharField(max_length=14)
     category = models.CharField(max_length=255)
-    value = models.CharField(max_length=8)
+    value = models.IntegerField()
