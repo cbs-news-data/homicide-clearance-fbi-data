@@ -6,3 +6,4 @@ pylint
 pyyaml
 remotezip
 tqdm
+vulture
