@@ -14,7 +14,7 @@ from utils import guess_n_loops
 logging.basicConfig(filename="output/transform.log", filemode="w", level=logging.INFO)
 
 # regex pattern to match all total columns I actually care about
-TOTAL_COLS_PAT = r"murder"
+TOTAL_COLS_PAT = r"^[a-z]{3}_(actual|cleared_arrest)_(murder)"
 
 OTHER_COLS_PATS = [
     # data I'll use in cleaning tasks
