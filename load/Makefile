@@ -13,4 +13,4 @@ output/sqlite__temp.db: \
 
 clean:
 	rm -f output/*
-	rm -f migrations/*
+	rm -rf data/migrations/*
