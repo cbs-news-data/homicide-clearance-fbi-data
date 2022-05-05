@@ -191,19 +191,6 @@ def drop_unrecognized_negative_value_entries(df):
     return df
 
 
-def convert_zero_to_nan(df):
-    """converts all zero values in 'value' column in df to np.NaN
-
-    Args:
-        df (pandas.DataFrame): dataframe to convert
-
-    Returns:
-        pandas.DataFrame: dataframe with zeros converted to NaN
-    """
-    assert "value" in df.columns
-    return df.replace({"value": {0: np.NaN}})
-
-
 def coerce_dtype(df):
     """sets the dtypes of each column defined in the DTYPES constant at the top of this module
 
@@ -259,9 +246,8 @@ def do_transformation(df):
     df = drop_unrecognized_negative_value_entries(df)
     # split the 'variable' column and reorder columns
     df = split_variable(df)
-    # replace all 0 values with NaN because the data contains zeros
-    # for missing values and you can't tell the difference.
-    df = convert_zero_to_nan(df)
+    # fill all NaN values with 0
+    df["value"] = df.value.fillna(0)
     # coerce dtypes
     df = coerce_dtype(df)
     return df
