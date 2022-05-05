@@ -4,7 +4,7 @@ GENERATED_FILES: output/reta_master.csv
 
 all: $(GENERATED_FILES)
 
-.PHONY: all input cleanup
+.PHONY: all input clean
 
 input:
 	cd input ; \
