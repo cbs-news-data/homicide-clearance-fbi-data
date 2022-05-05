@@ -40,7 +40,7 @@ DTYPES = {
     "month": str,
     "card": str,
     "category": str,
-    "value": float,
+    "value": int,
 }
 
 
