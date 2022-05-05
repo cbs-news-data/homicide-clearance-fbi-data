@@ -12,5 +12,5 @@ output/sqlite__temp.db: \
 	python manage.py load_from_csv $(CSV_FILES)
 
 clean:
-	rm sqlite_temp.db
+	rm -f output/*
 	rm -f migrations/*
