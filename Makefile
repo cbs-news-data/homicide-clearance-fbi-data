@@ -4,7 +4,6 @@ TASKS := extract transform
 .PHONY: \
 	all \
 	raw \
-	clean \
 	clean-raw \
 	clean-output \
 	$(TASKS)
