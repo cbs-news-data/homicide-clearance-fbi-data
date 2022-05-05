@@ -26,6 +26,6 @@ output/stacked.csv: \
 		i=$$((i+1)) ; \
 	done ;  \
 	echo "Wrote $$(cat $@ | wc -l) unique rows to $@" > output/extract.log
-	
+
 clean:
 	rm -f output/*
