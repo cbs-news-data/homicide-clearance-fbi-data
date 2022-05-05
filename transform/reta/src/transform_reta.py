@@ -6,9 +6,12 @@ import logging
 import math
 import re
 import sys
+import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import yaml
+
+logging.basicConfig(filename="output/transform.log", filemode="w", level=logging.INFO)
 
 # regex pattern to match all total columns I actually care about
 TOTAL_COLS_PAT = r"^[a-z]{3}_(actual|cleared_arrest)_(?![A-Z]+)"
@@ -28,6 +31,17 @@ INDEX_COLS = [
 ]
 
 KEEP_COLS_PATS = [TOTAL_COLS_PAT] + INDEX_COLS + OTHER_COLS_PATS
+
+DTYPES = {
+    "ori_code": str,
+    "agency_name": str,
+    "agency_state_name": str,
+    "year": int,
+    "month": str,
+    "card": str,
+    "category": str,
+    "value": float,
+}
 
 
 def select_columns(df):
@@ -153,11 +167,107 @@ def replace_vals_from_yaml(df, yaml_filename):
     return df
 
 
-if __name__ == "__main__":
-    logging.basicConfig(
-        filename="output/transform.log", filemode="w", level=logging.INFO
-    )
+def drop_unrecognized_negative_value_entries(df):
+    """
+    drops any remaining non-numeric values after attempting conversion.
+    some values contain negative entries that are not documented, so they must be dropped.
 
+    Args:
+        df (pandas.DataFrame): dataframe to drop from
+
+    Returns:
+        pandas.DataFrame: dataframe with entries dropped
+    """
+
+    def try_convert(val):
+        try:
+            float(val)
+        except ValueError:
+            return np.NaN
+        else:
+            return val
+
+    df["value"] = df.value.apply(try_convert)
+    return df
+
+
+def convert_zero_to_nan(df):
+    """converts all zero values in 'value' column in df to np.NaN
+
+    Args:
+        df (pandas.DataFrame): dataframe to convert
+
+    Returns:
+        pandas.DataFrame: dataframe with zeros converted to NaN
+    """
+    assert "value" in df.columns
+    return df.replace({"value": {0: np.NaN}})
+
+
+def coerce_dtype(df):
+    """sets the dtypes of each column defined in the DTYPES constant at the top of this module
+
+    Args:
+        df (pandas.DataFrame): dataframe to coerce
+
+    Returns:
+        pandas.DataFrame: dataframe with dtypes fixed
+    """
+    return df.astype(DTYPES)
+
+
+def drop_blank_rows(df):
+    """drops all rows that are missing all index values
+
+    Args:
+        df (pandas.DataFrame): dataframe to drop from
+
+    Returns:
+        pandas.DataFrame: dataframe with missing data dropped
+    """
+    orig_len = len(df)
+    df = df.dropna(axis=0, how="all", subset=INDEX_COLS)
+    n_dropped = orig_len - len(df)
+    if n_dropped > 0:
+        logging.info("dropped %s rows with missing index values", orig_len - len(df))
+    return df
+
+
+def do_transformation(df):
+    """does all necessary transformations on the data
+
+    Args:
+        df (pandas.DataFrame): original dataframe from the output of extract/
+
+    Returns:
+        pandas.DataFrame: transformed dataframe
+    """
+    # drop rows missing all index data (there are a few)
+    df = drop_blank_rows(df)
+    # drop the columns you don't want
+    df = df[KEEP_COLS]
+    # melt the dataframe
+    df = melt_df(df, KEEP_COLS)
+    # replace values from yaml files in hand/
+    for filename in sys.argv[2:-1]:
+        assert filename.endswith(".yaml") or filename.endswith(".yml"), (
+            "all other arguments besides input file must be yaml files, except for "
+            "last argument, which should be output file"
+        )
+        df = replace_vals_from_yaml(df, filename)
+    # drop any negative value entries that weren't replaced
+    df = drop_unrecognized_negative_value_entries(df)
+    # split the 'variable' column and reorder columns
+    df = split_variable(df)
+    # replace all 0 values with NaN because the data contains zeros
+    # for missing values and you can't tell the difference.
+    df = convert_zero_to_nan(df)
+    # coerce dtypes
+    df = coerce_dtype(df)
+    return df
+
+
+if __name__ == "__main__":
     CHUNKSIZE = 1000  # using a small chunksize as the resulting files are 600x taller
     ENCODING = "latin1"
 
@@ -185,22 +295,7 @@ if __name__ == "__main__":
         if KEEP_COLS is None:
             KEEP_COLS = select_columns(chunk)
 
-        # drop the columns you don't want
-        chunk = chunk[KEEP_COLS]
-
-        # melt the dataframe
-        chunk = melt_df(chunk, KEEP_COLS)
-
-        # split the 'variable' column and reorder columns
-        chunk = split_variable(chunk)
-
-        # replace values from yaml files in hand/
-        for filename in sys.argv[2:-1]:
-            assert filename.endswith(".yaml") or filename.endswith(".yml"), (
-                "all other arguments besides input file must be yaml files, except for "
-                "last argument, which should be output file"
-            )
-            chunk = replace_vals_from_yaml(chunk, filename)
+        chunk = do_transformation(chunk)
 
         if loop_index == 0:
             MODE = "w"
@@ -212,8 +307,9 @@ if __name__ == "__main__":
         chunk.to_csv(sys.argv[-1], index=False, mode=MODE, header=HEADER)
 
         logging.info(
-            "[%s/%s] wrote %s lines to file.",
+            "[%s/%s] wrote %s lines and %s columns to file.",
             loop_index + 1,
             total_loops,
             len(chunk),
+            len(chunk.columns),
         )
