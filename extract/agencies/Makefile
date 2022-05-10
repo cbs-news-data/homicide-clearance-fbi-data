@@ -22,7 +22,7 @@ output/stacked.csv: \
 		if [[ i == 0 ]] ; then \
 			cat $$file | csvcut -c $(COLUMNS) > $@ ; \
 		else \
-			cat $$file | csvcut -c $(COLUMNS) >> $@ ; \
+			cat $$file | csvcut -c $(COLUMNS) | awk "NR > 1" >> $@ ; \
 		fi ; \
 		i=$$((i+1)) ; \
 	done ;  \
