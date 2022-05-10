@@ -30,7 +30,7 @@ class Command(BaseCommand):
                 model = models.__dict__[model_name]
             except KeyError as exc:
                 raise ValueError(
-                    f"model '{model_name}' does not exist in models/__init__.py"
+                    f"model '{model_name}' does not exist in models.py"
                 ) from exc
 
             model_fields = [
