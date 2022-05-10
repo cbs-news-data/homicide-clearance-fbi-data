@@ -11,6 +11,7 @@ all: $(GENERATED_FILES)
 output/agencies.csv: output/stacked.csv
 	head -1 $< > $@
 	cat $< | awk "NR > 1" | sort -u >> $@
+	echo "Wrote $$(cat $@ | wc -l) unique rows to $@" > output/extract.log
 
 COLUMNS := data_year,ori,ncic_agency_name,state_abbr,population,county_name,msa_name
 
@@ -19,14 +20,13 @@ output/stacked.csv: \
 		input/agencies-2000-2020.csv
 	@i=0 ; \
 	for file in $^ ; do \
-		if [[ i == 0 ]] ; then \
+		if [[ $$i == 0 ]] ; then \
 			cat $$file | csvcut -c $(COLUMNS) > $@ ; \
 		else \
 			cat $$file | csvcut -c $(COLUMNS) | awk "NR > 1" >> $@ ; \
 		fi ; \
 		i=$$((i+1)) ; \
 	done ;  \
-	echo "Wrote $$(cat $@ | wc -l) unique rows to $@" > output/extract.log
 
 clean:
 	rm -f output/*
