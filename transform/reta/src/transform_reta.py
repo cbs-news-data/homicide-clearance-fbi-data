@@ -10,6 +10,7 @@ import pandas as pd
 from tqdm import tqdm
 import yaml
 from utils import guess_n_loops
+from standardize import standardize_ori
 
 logging.basicConfig(filename="output/transform.log", filemode="w", level=logging.INFO)
 
@@ -252,6 +253,8 @@ def do_transformation(df):
     df["value"] = df.value.fillna(0)
     # coerce dtypes
     df = coerce_dtype(df)
+    # standardization
+    df["ori_code"] = df.ori_code.apply(standardize_ori)
     return df
 
 
