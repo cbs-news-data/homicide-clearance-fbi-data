@@ -7,7 +7,7 @@ from .validators import validate_ori
 class RetA(models.Model):
     """handles cleaned return A data"""
 
-    unique_id = models.CharField(max_length=40, unique=True)
+    unique_id = models.CharField(max_length=40, unique=True, primary_key=True)
     ori_code = models.CharField(max_length=9, validators=[validate_ori])
     agency_name = models.CharField(max_length=25)
     core_city = models.BooleanField()
@@ -22,7 +22,7 @@ class RetA(models.Model):
 class Agencies(models.Model):
     """handles cleaned agency data"""
 
-    unique_id = models.CharField(max_length=40, unique=True)
+    unique_id = models.CharField(max_length=40, unique=True, primary_key=True)
     data_year = models.IntegerField(choices=[(i, i) for i in range(1960, 2021)])
     ori = models.CharField(max_length=9, validators=[validate_ori])
     ncic_agency_name = models.CharField(max_length=50)
