@@ -11,6 +11,7 @@ from tqdm import tqdm
 import yaml
 from utils import guess_n_loops
 from standardize import standardize_ori
+from assign_unique_ids import assign_unique_ids
 
 logging.basicConfig(filename="output/transform.log", filemode="w", level=logging.INFO)
 
@@ -223,6 +224,17 @@ def drop_blank_rows(df):
     return df
 
 
+def drop_duplicate_rows(df):
+    """drops entirely duplicate rows"""
+    orig_len = len(df)
+    df = df.drop_duplicates(keep="first")
+    new_len = len(df)
+    n_dropped = orig_len - new_len
+    if n_dropped > 0:
+        logging.info("dropped %s rows with missing index values", orig_len - new_len)
+    return df
+
+
 def do_transformation(df):
     """does all necessary transformations on the data
 
@@ -255,6 +267,18 @@ def do_transformation(df):
     df = coerce_dtype(df)
     # standardization
     df["ori_code"] = df.ori_code.apply(standardize_ori)
+    # drop duplicates on all rows
+    df = drop_duplicate_rows(df)
+    # assign unique IDs
+    df = assign_unique_ids(
+        df,
+        "year",
+        "month",
+        "ori_code",
+        "agency_name",
+        "card",
+        "category",
+    )
     return df
 
 
