@@ -26,6 +26,7 @@ INDEX_COLS = [
     # agency and report data
     "ori_code",
     "agency_name",
+    "core_city",
     "agency_state_name",
     "year",
 ]
@@ -35,6 +36,7 @@ KEEP_COLS_PATS = [TOTAL_COLS_PAT] + INDEX_COLS + OTHER_COLS_PATS
 DTYPES = {
     "ori_code": str,
     "agency_name": str,
+    "core_city": bool,
     "agency_state_name": str,
     "year": int,
     "month": str,

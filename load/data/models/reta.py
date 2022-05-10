@@ -8,6 +8,7 @@ class RetA(models.Model):
 
     ori_code = models.CharField(max_length=7)
     agency_name = models.CharField(max_length=25)
+    core_city = models.BooleanField()
     agency_state_name = models.CharField(max_length=6)
     year = models.IntegerField()
     month = models.CharField(max_length=3)
