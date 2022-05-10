@@ -15,6 +15,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 CSV_FILES = {
     "reta_master.csv": "RetA",
+    "agencies.csv": "Agencies",
 }
 
 CHUNKSIZE = 1000
