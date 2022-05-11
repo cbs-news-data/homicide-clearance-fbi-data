@@ -2,3 +2,4 @@
 venv
 **/output/*.csv
 __pycache__
+.vscode
