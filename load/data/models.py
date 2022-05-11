@@ -30,3 +30,4 @@ class Agencies(models.Model):
     population = models.IntegerField
     county_name = models.CharField(max_length=50)
     msa_name = models.CharField(max_length=50)
+    city_name = models.CharField(max_length=50)
