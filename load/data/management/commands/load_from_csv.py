@@ -17,7 +17,7 @@ class Command(BaseCommand):
         parser.add_argument("csv_files", nargs="+", type=str)
 
     def handle(self, *args, **options):
-        for filename in tqdm(options["csv_files"], desc="csv files"):
+        for filename in tqdm(options["csv_files"], desc="load data"):
             try:
                 model_name = settings.CSV_FILES[os.path.basename(filename)]
             except KeyError as exc:
@@ -47,7 +47,7 @@ class Command(BaseCommand):
                         lambda reader=reader: tuple(islice(reader, settings.CHUNKSIZE)),
                         (),
                     ),
-                    desc="batch process file",
+                    desc=f"load {filename}",
                     total=guess_n_loops(filename, settings.CHUNKSIZE),
                     leave=False,
                 ):
