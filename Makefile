@@ -21,14 +21,10 @@ venv/bin/activate: requirements.txt
 	source $@ && pip install -r $<
 	touch $@
 
-clean:
-	make clean-output
-	make clean-raw
-
 clean-raw:
 	find . -wholename "./raw/*/*" ! -name ".gitignore" -type f -delete
 
-clean-output:
+clean:
 	for d in $(TASKS) ; do \
 		cd "$(shell pwd)/$$d" && make clean  ; \
 	done
