@@ -26,7 +26,7 @@ clean:
 	make clean-raw
 
 clean-raw:
-	find . -wholename "./raw/*/*" -type f -delete
+	find . -wholename "./raw/*/*" ! -name ".gitignore" -type f -delete
 
 clean-output:
 	for d in $(TASKS) ; do \
