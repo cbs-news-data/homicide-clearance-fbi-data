@@ -9,6 +9,7 @@ all: $(GENERATED_FILES)
 output/sqlite__temp.db: \
 		$(CSV_FILES) \
 		$(wildcard data/*/*)
+	make clean
 	python manage.py makemigrations
 	python manage.py migrate --run-syncdb
 	python manage.py load_from_csv $(CSV_FILES)
