@@ -16,4 +16,4 @@ output/sqlite__temp.db: \
 
 clean:
 	rm -f output/*
-	rm -rf data/migrations/*
+	find . -wholename "./data/migrations/*" ! -name __init__.py -type f -delete
