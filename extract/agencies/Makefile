@@ -13,7 +13,7 @@ output/agencies.csv: output/stacked.csv
 	cat $< | awk "NR > 1" | sort -u >> $@
 	echo "Wrote $$(cat $@ | wc -l) unique rows to $@" > output/extract.log
 
-COLUMNS := data_year,ori,ncic_agency_name,state_abbr,population,county_name,msa_name
+COLUMNS := data_year,ori,ucr_agency_name,ncic_agency_name,state_abbr,population,county_name,msa_name
 
 output/stacked.csv: \
 		input/agencies-1960-1999.csv \
