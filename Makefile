@@ -1,5 +1,10 @@
 SHELL := /bin/bash
-TASKS := extract transform merge load
+TASKS := \
+	extract \
+	transform \
+	merge \
+	load \
+	notebook
 
 .PHONY: \
 	all \
