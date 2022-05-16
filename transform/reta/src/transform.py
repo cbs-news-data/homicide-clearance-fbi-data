@@ -298,6 +298,7 @@ def do_transformation(df):
         "card",
         "category",
     )
+    df = manual_drop_rows(df)
     return df
 
 
