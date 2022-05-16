@@ -269,12 +269,10 @@ INFO:root:[262/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[263/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[264/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[265/553] wrote 24000 lines and 10 columns to file.
-INFO:root:dropped 1 rows with missing index values
-INFO:root:[266/553] wrote 23976 lines and 10 columns to file.
+INFO:root:[266/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[267/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[268/553] wrote 24000 lines and 10 columns to file.
-INFO:root:dropped 48 rows with missing index values
-INFO:root:[269/553] wrote 23952 lines and 10 columns to file.
+INFO:root:[269/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[270/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[271/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[272/553] wrote 24000 lines and 10 columns to file.
@@ -292,10 +290,12 @@ INFO:root:[283/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[284/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[285/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[286/553] wrote 24000 lines and 10 columns to file.
-INFO:root:[287/553] wrote 24000 lines and 10 columns to file.
+INFO:root:dropped 1 rows with missing index values
+INFO:root:[287/553] wrote 23976 lines and 10 columns to file.
 INFO:root:[288/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[289/553] wrote 24000 lines and 10 columns to file.
-INFO:root:[290/553] wrote 24000 lines and 10 columns to file.
+INFO:root:dropped 48 rows with missing index values
+INFO:root:[290/553] wrote 23952 lines and 10 columns to file.
 INFO:root:[291/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[292/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[293/553] wrote 24000 lines and 10 columns to file.
@@ -314,8 +314,7 @@ INFO:root:[305/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[306/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[307/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[308/553] wrote 24000 lines and 10 columns to file.
-INFO:root:dropped 1 rows with missing index values
-INFO:root:[309/553] wrote 23976 lines and 10 columns to file.
+INFO:root:[309/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[310/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[311/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[312/553] wrote 24000 lines and 10 columns to file.
@@ -336,7 +335,8 @@ INFO:root:[326/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[327/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[328/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[329/553] wrote 24000 lines and 10 columns to file.
-INFO:root:[330/553] wrote 24000 lines and 10 columns to file.
+INFO:root:dropped 1 rows with missing index values
+INFO:root:[330/553] wrote 23976 lines and 10 columns to file.
 INFO:root:[331/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[332/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[333/553] wrote 24000 lines and 10 columns to file.
@@ -362,8 +362,7 @@ INFO:root:[352/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[353/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[354/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[355/553] wrote 24000 lines and 10 columns to file.
-INFO:root:dropped 72 rows with missing index values
-INFO:root:[356/553] wrote 23928 lines and 10 columns to file.
+INFO:root:[356/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[357/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[358/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[359/553] wrote 24000 lines and 10 columns to file.
@@ -384,7 +383,8 @@ INFO:root:[373/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[374/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[375/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[376/553] wrote 24000 lines and 10 columns to file.
-INFO:root:[377/553] wrote 24000 lines and 10 columns to file.
+INFO:root:dropped 72 rows with missing index values
+INFO:root:[377/553] wrote 23928 lines and 10 columns to file.
 INFO:root:[378/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[379/553] wrote 24000 lines and 10 columns to file.
 INFO:root:[380/553] wrote 24000 lines and 10 columns to file.

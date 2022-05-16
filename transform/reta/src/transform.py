@@ -47,6 +47,16 @@ DTYPES = {
     "value": int,
 }
 
+# list of dictionaries mapping column names to values for rows I want dropped
+DROP_ROWS = [
+    {
+        "ori_code": "OH0720300",
+        "agency_name": "FREMONT",
+        "card": "cleared_arrest",
+        "year": 2017,
+    }
+]
+
 
 def select_columns(df):
     """
@@ -232,6 +242,15 @@ def drop_duplicate_rows(df):
     n_dropped = orig_len - new_len
     if n_dropped > 0:
         logging.info("dropped %s rows with missing index values", orig_len - new_len)
+    return df
+
+
+def manual_drop_rows(df):
+    """Drops rows described in DROP_ROWS"""
+
+    for row_dict in DROP_ROWS:
+        df = df.loc[~(df[row_dict.keys()].isin(row_dict.values()).all(axis=1))]
+
     return df
 
 
