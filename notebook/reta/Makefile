@@ -1,7 +1,9 @@
+SHELL=/bin/bash
+
 .PHONY: all clean
 
 all: src/reta.ipynb
 	ipython $^
 
 clean:
-	rm -f output/*
+	find output/ -type f -not -name ".gitignore" -delete 
