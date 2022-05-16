@@ -10,6 +10,7 @@ Performs the following transformations:
 7. drops duplicate rows
     - This is because at least one agency "MD INVESTIGATIVE SERV" (ORI MD0021000) appears to have submitted twice in 1996. The values are the same, so dropping duplicates
 8. assigns unique IDs based on row values
+9. drops the row for Fremont, Ohio, which in 2017 apparently reported 13,000 clearances
 
 Disclaimers: 
 - Some values appear to be negative entries, but aren't documented in the FBI's documentation. They are dropped. 
