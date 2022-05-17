@@ -170,8 +170,7 @@ class Report:
                             msa_name=self.market_data["msa_name"],
                         )
                         * 100,
-                        title=f"{self.market_data['msa_name']} "
-                        f"{self.market_data['msa_name']} homicide clearance rate",
+                        title=f"{self.market_data['msa_name']} homicide clearance rate",
                     ),
                     "table_html": get_table_html(
                         get_data(
@@ -211,6 +210,27 @@ class Report:
                         ori_code=agency_info["ori_code"],
                         agency_name=agency_info["agency_name"],
                     )
+                ),
+                "plot_svg": get_plot_svg(
+                    get_data(
+                        df=agency,
+                        column="clearance_rate",
+                        index_col="year",
+                        single_value=False,
+                        ori_code=agency_info["ori_code"],
+                        agency_name=agency_info["agency_name"],
+                    ),
+                    title=f"{agency_info['agency_name']} homicide clearance rate",
+                ),
+                "table_html": get_table_html(
+                    get_data(
+                        df=agency,
+                        index_col="year",
+                        single_value=False,
+                        ori_code=agency_info["ori_code"],
+                        agency_name=agency_info["agency_name"],
+                    ),
+                    columns=["Actual", "Cleared", "Clearance Rate"],
                 ),
             }
             adata["compared_to_national"] = format_pct(

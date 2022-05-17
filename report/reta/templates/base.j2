@@ -123,6 +123,11 @@
                 <div id="metropolitan-statistical-area">
                     {{ detail_block("Metropolitan area", report.msa.msa_name, report, report.msa) }}
                 </div>
+                <div id="individual-agencies">
+                    {% for agency_info in report.core_agencies %}
+                        {{ detail_block(agency_info.agency_name.title(), agency_info.agency_name.title(), report, agency_info) }}
+                    {% endfor %}
+                </div>
                 <div id="definitions">
                     <h2>Definitions</h2>
                     <ul>
