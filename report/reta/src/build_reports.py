@@ -69,7 +69,7 @@ state_5yr = pd.read_csv("input/state_5yr.csv")
 with open("hand/markets.yaml", "r", encoding="utf-8") as file:
     markets = yaml.load(file, Loader=yaml.CLoader)
 
-run_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+run_timestamp = datetime.now().strftime("%Y-%m-%d at %H:%M %p")
 
 national_clearance_rate = format_pct(get_data(national, "clearance_rate", year=2020))
 
