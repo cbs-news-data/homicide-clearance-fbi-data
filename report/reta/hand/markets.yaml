@@ -1,0 +1,8 @@
+dallas_fort_worth:
+  state_abbr: TX
+  msa_name: Dallas-Fort Worth-Arlington, TX
+  core_agencies: 
+    - ori_code: TXDPD0000
+      agency_name: DALLAS
+    - ori_code: TX2201200
+      agency_name: FORT WORTH
