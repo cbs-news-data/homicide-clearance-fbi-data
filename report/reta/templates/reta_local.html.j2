@@ -36,6 +36,33 @@
       .chart-wrapper {
           text-align: center;
       }
+
+      .dataframe {
+        margin: auto !important
+      }
+
+      .dataframe {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        .dataframe td, .dataframe th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        }
+
+        .dataframe tr:nth-child(even){background-color: #f2f2f2;}
+
+        .dataframe tr:hover {background-color: #ddd;}
+
+        .dataframe th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #04AA6D;
+        color: white;
+        }
         </style>
     </head>
     <body>
@@ -118,6 +145,7 @@
                     {% endif %}
                     than the national average of {{ report.national_clearance_rate }}%.
                     <div class="chart-wrapper">{{ report.state.plot_svg }}</div>
+                    <div class="table-wrapper">{{ report.state.table_html }}</div>
                 </div>
             </div>
             <div id="definitions">
@@ -144,7 +172,9 @@
                 <p>
                     blah blah blah
                 </p>
-                <h3>Data Preparation</h3>
+                <h3>
+                    Data Preparation
+                </h3>
                 <p>
                     blah blah blah
                 </p>

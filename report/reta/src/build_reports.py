@@ -8,7 +8,7 @@ import pandas as pd
 import yaml
 
 
-def get_data(df, column, index_col=None, single_value=True, **kwargs):
+def get_data(df, column=None, index_col=None, single_value=True, **kwargs):
     """filters a dataframe based on kwargs and returns column from the resulting row
 
     Args:
@@ -32,7 +32,11 @@ def get_data(df, column, index_col=None, single_value=True, **kwargs):
 
     if single_value is True:
         assert len(res) == 1, f"query result should have 1 row, got {len(res)}"
+        assert column is not None, "must pass a column to obtain a single value"
         return res.iloc[0][column]
+
+    if column is None:
+        return res
     return res[column]
 
 
@@ -107,6 +111,15 @@ class Report:
                         title=f"{self.market_data['state_abbr']} "
                         "statewide homicide clearance rate",
                     ),
+                    "table_html": get_table_html(
+                        get_data(
+                            df=state,
+                            index_col="year",
+                            single_value=False,
+                            state_abbr=self.market_data["state_abbr"],
+                        ),
+                        columns=["Actual", "Cleared", "Clearance Rate"],
+                    ),
                 },
                 "core_agencies": [],
             }
@@ -172,6 +185,21 @@ def get_plot_svg(df, **kwargs):
         **kwargs,
     ).get_figure().savefig(string_io, format="svg", dpi=1200)
     return string_io.getvalue()
+
+
+def get_table_html(df, **kwargs):
+    """runs dataframe.to_html with styling and returns the html"""
+    if "clearance_rate" in df.columns:
+        df["clearance_rate"] = (
+            df.clearance_rate.multiply(100).round(1).astype(str) + "%"
+        )
+
+    df.columns = (
+        df.columns.str.replace("_", " ")
+        .str.replace("cleared arrest", "cleared")
+        .str.title()
+    )
+    return df.to_html(**kwargs)
 
 
 if __name__ == "__main__":
