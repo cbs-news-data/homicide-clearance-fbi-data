@@ -32,6 +32,10 @@
         color: #849324;
         font-weight: bold;
       }
+
+      .chart-wrapper {
+          text-align: center;
+      }
         </style>
     </head>
     <body>
@@ -113,6 +117,7 @@
                         <span class="text-worsened">less</span>
                     {% endif %}
                     than the national average of {{ report.national_clearance_rate }}%.
+                    <div class="chart-wrapper">{{ report.state.plot_svg }}</div>
                 </div>
             </div>
             <div id="definitions">

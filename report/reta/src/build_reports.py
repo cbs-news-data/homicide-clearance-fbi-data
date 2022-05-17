@@ -8,7 +8,7 @@ import pandas as pd
 import yaml
 
 
-def get_data(df, column, **kwargs):
+def get_data(df, column, index_col=None, single_value=True, **kwargs):
     """filters a dataframe based on kwargs and returns column from the resulting row
 
     Args:
@@ -26,8 +26,14 @@ def get_data(df, column, **kwargs):
         query_string.append(f"({kwarg} == {val_str})")
 
     res = df.query("&".join(query_string))
-    assert len(res) == 1, f"query result should have 1 row, got {len(res)}"
-    return res.iloc[0][column]
+
+    if index_col is not None:
+        res = res.set_index(index_col)
+
+    if single_value is True:
+        assert len(res) == 1, f"query result should have 1 row, got {len(res)}"
+        return res.iloc[0][column]
+    return res[column]
 
 
 def format_pct(pct):
@@ -89,6 +95,18 @@ class Report:
                             state_abbr=self.market_data["state_abbr"],
                         )
                     ),
+                    "plot_svg": get_plot_svg(
+                        get_data(
+                            df=state,
+                            column="clearance_rate",
+                            index_col="year",
+                            single_value=False,
+                            state_abbr=self.market_data["state_abbr"],
+                        )
+                        * 100,
+                        title=f"{self.market_data['state_abbr']} "
+                        "statewide homicide clearance rate",
+                    ),
                 },
                 "core_agencies": [],
             }
@@ -143,11 +161,17 @@ def compare_to_national(num):
     return format_pct((num - national_clearance_rate) / national_clearance_rate)
 
 
-def get_plot_svg(df, kind="line", figsize=(15, 12)):
+def get_plot_svg(df, **kwargs):
     """runs dataframe.plot with styling and gets the svg text"""
-    io = StringIO
-    df.plot(kind=kind, figsize=figsize).get_figure().savefig(io, format="svg", dpi=1200)
-    return io.read()
+    string_io = StringIO()
+    df.plot(
+        figsize=kwargs.pop("figsize", (7, 4.5)),
+        legend=kwargs.pop("legend", True),
+        xlabel=kwargs.pop("xlabel", "Year"),
+        ylabel=kwargs.pop("ylabel", "Clearance rate"),
+        **kwargs,
+    ).get_figure().savefig(string_io, format="svg", dpi=1200)
+    return string_io.getvalue()
 
 
 if __name__ == "__main__":
