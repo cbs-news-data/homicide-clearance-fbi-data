@@ -4,6 +4,7 @@ from datetime import datetime
 from io import StringIO
 import re
 import jinja2
+import matplotlib.pyplot as plt
 import pandas as pd
 import yaml
 
@@ -128,13 +129,52 @@ class Report:
                         columns=["Actual", "Cleared", "Clearance Rate"],
                     ),
                 },
+                "msa": {
+                    "msa_name": self.market_data["msa_name"],
+                    "clearance_rate_2020": format_pct(
+                        get_data(
+                            df=msa_2020,
+                            column="clearance_rate",
+                            msa_name=self.market_data["msa_name"],
+                        )
+                    ),
+                    "clearance_rate_2020_change": format_pct(
+                        get_data(
+                            df=msa_5yr,
+                            column="change",
+                            msa_name=self.market_data["msa_name"],
+                        )
+                    ),
+                    "plot_svg": get_plot_svg(
+                        get_data(
+                            df=msa,
+                            column="clearance_rate",
+                            index_col="year",
+                            single_value=False,
+                            msa_name=self.market_data["msa_name"],
+                        )
+                        * 100,
+                        title=f"{self.market_data['msa_name']} "
+                        f"{self.market_data['msa_name']} homicide clearance rate",
+                    ),
+                    "table_html": get_table_html(
+                        get_data(
+                            df=msa,
+                            index_col="year",
+                            single_value=False,
+                            msa_name=self.market_data["msa_name"],
+                        ),
+                        columns=["Actual", "Cleared", "Clearance Rate"],
+                    ),
+                },
                 "core_agencies": [],
             }
         )
 
-        self.data["state"]["compared_to_national"] = compare_to_national(
-            self.data["state"]["clearance_rate_2020"]
-        )
+        for field in ["state", "msa"]:
+            self.data[field]["compared_to_national"] = compare_to_national(
+                self.data[field]["clearance_rate_2020"]
+            )
 
         # core agencies
         for agency_info in self.market_data["core_agencies"]:
@@ -191,6 +231,7 @@ def get_plot_svg(df, **kwargs):
         ylabel=kwargs.pop("ylabel", "Clearance rate"),
         **kwargs,
     ).get_figure().savefig(string_io, format="svg", dpi=1200)
+    plt.clf()
     return string_io.getvalue()
 
 

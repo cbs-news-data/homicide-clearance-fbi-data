@@ -119,36 +119,39 @@
                         </p>
                     {% endfor %}
                 </div>
-                <div id="state-level-data">{{ detail_block("State-Level Data", "Statewide", report, report.state) }}</div>
-            </div>
-            <div id="definitions">
-                <h2>Definitions</h2>
-                <ul>
-                    <li></li>
-                </ul>
-            </div>
-            <div id="methodology">
-                <h2>Methodology</h2>
-                <p>
-                    A full methodology and source code will be published at the
-                    conclusion of this project. This section serves to provide
-                    explanations of the basic process used to analyze this data so your
-                    station can answer any questions that may arise from law enforcement
-                    agencies.
-                </p>
-                <p>
-                    If you have additional questions or get a question from an agency or
-                    expert that you can't answer based on the information below,
-                    <a href="mailto:cmhacker@viacomcbs.com">contact me</a>.
-                </p>
-                <h3>Data Source</h3>
-                <p>
-                    blah blah blah
-                </p>
-                <h3>Data Preparation</h3>
-                <p>
-                    blah blah blah
-                </p>
+                <div id="state-level-data">{{ detail_block("State-Level Data", "the state", report, report.state) }}</div>
+                <div id="metropolitan-statistical-area">
+                    {{ detail_block("Metropolitan area", report.msa.msa_name, report, report.msa) }}
+                </div>
+                <div id="definitions">
+                    <h2>Definitions</h2>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </div>
+                <div id="methodology">
+                    <h2>Methodology</h2>
+                    <p>
+                        A full methodology and source code will be published at the
+                        conclusion of this project. This section serves to provide
+                        explanations of the basic process used to analyze this data so your
+                        station can answer any questions that may arise from law enforcement
+                        agencies.
+                    </p>
+                    <p>
+                        If you have additional questions or get a question from an agency or
+                        expert that you can't answer based on the information below,
+                        <a href="mailto:cmhacker@viacomcbs.com">contact me</a>.
+                    </p>
+                    <h3>Data Source</h3>
+                    <p>
+                        blah blah blah
+                    </p>
+                    <h3>Data Preparation</h3>
+                    <p>
+                        blah blah blah
+                    </p>
+                </div>
             </div>
         </div>
     </div>
