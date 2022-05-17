@@ -20,5 +20,6 @@
     <{{ header_level }}>{{ title }}</{{ header_level }}>
     {{ trend_description(descriptor, report, data) }}
     <div class="chart-wrapper">{{ data.annual_chart_svg }}</div>
+    <div class="table-wrapper">{{ data.comparison_chart_html }}</div>
     <div class="table-wrapper">{{ data.annual_table_html }}</div>
 {% endmacro %}

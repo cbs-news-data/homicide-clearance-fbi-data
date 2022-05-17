@@ -146,20 +146,21 @@ def get_single_data(geography, title, **selectors):
     Returns:
         dict: dict of template data
     """
-    annual_df = globals()[geography]
+    df_annual = globals()[geography]
+    df_2020 = globals()[f"{geography}_2020"]
+    df_5yr = globals()[f"{geography}_5yr"]
+
     data = {
         "title": title,
         "clearance_rate_2020": format_pct(
-            get_data(
-                df=globals()[f"{geography}_2020"], column="clearance_rate", **selectors
-            )
+            get_data(df=df_2020, column="clearance_rate", **selectors)
         ),
         "clearance_rate_2020_change": format_pct(
-            get_data(df=globals()[f"{geography}_5yr"], column="change", **selectors)
+            get_data(df=df_5yr, column="change", **selectors)
         ),
         "annual_chart_svg": get_chart_svg(
             get_data(
-                df=annual_df,
+                df=df_annual,
                 column="clearance_rate",
                 index_col="year",
                 single_value=False,
@@ -169,11 +170,19 @@ def get_single_data(geography, title, **selectors):
             title=f"{title} homicide clearance rate",
         ),
         "annual_table_html": get_table_html(
-            get_data(df=annual_df, index_col="year", single_value=False, **selectors),
+            get_data(df=df_annual, index_col="year", single_value=False, **selectors),
             columns=["Actual", "Cleared", "Clearance Rate"],
         ),
     }
     data["compared_to_national"] = compare_to_national(data["clearance_rate_2020"])
+    data["comparison_chart_html"] = get_table_html(
+        get_data(
+            df=df_5yr.rename(columns={"2015_2019_avg": "2015-2019 Average"}),
+            index_col=list(selectors.keys()),
+            single_value=False,
+            **selectors,
+        )
+    )
     return data
 
 
@@ -199,10 +208,10 @@ def get_chart_svg(df, **kwargs):
 
 def get_table_html(df, **kwargs):
     """runs dataframe.to_html with styling and returns the html"""
-    if "clearance_rate" in df.columns:
-        df["clearance_rate"] = (
-            df.clearance_rate.multiply(100).round(1).astype(str) + "%"
-        )
+    pct_cols = ["2015-2019 Average", "clearance_rate", "2020", "change"]
+    for col in pct_cols:
+        if col in df.columns:
+            df[col] = df[col].multiply(100).round(1).astype(str) + "%"
 
     df.columns = (
         df.columns.str.replace("_", " ")
