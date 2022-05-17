@@ -4,8 +4,8 @@ from datetime import datetime
 from io import StringIO
 import re
 from textwrap import wrap
+import hvplot
 import jinja2
-import matplotlib.pyplot as plt
 import pandas as pd
 import yaml
 
@@ -129,7 +129,7 @@ class Report:
 
         html = self.template.render(report=self.data)
         with open(
-            f"output/reta_{self.market_name_snake_case}.html",
+            f"output/clearance_rate_{self.market_name_snake_case}.html",
             "w",
             encoding="utf-8",
         ) as outfile:
@@ -167,7 +167,7 @@ def get_single_data(geography, title, **selectors):
                 **selectors,
             )
             * 100,
-            title=f"{title} homicide clearance rate",
+            title=f"{title} Homicide Clearance Rate",
         ),
         "annual_table_html": get_table_html(
             get_data(df=df_annual, index_col="year", single_value=False, **selectors),
@@ -194,15 +194,16 @@ def compare_to_national(num):
 def get_chart_svg(df, **kwargs):
     """runs dataframe.plot with styling and gets the svg text"""
     string_io = StringIO()
-    df.plot(
+    curve = df.plot(
         title=word_wrap_title(kwargs.pop("title", None)),
-        figsize=kwargs.pop("figsize", (7, 4.5)),
+        height=kwargs.pop("height", 500),
         legend=kwargs.pop("legend", True),
         xlabel=kwargs.pop("xlabel", "Year"),
         ylabel=kwargs.pop("ylabel", "Clearance rate"),
+        backend=kwargs.pop("backend", "hvplot"),
         **kwargs,
-    ).get_figure().savefig(string_io, format="svg", dpi=1200)
-    plt.clf()
+    )
+    hvplot.save(curve, string_io)
     return string_io.getvalue()
 
 
