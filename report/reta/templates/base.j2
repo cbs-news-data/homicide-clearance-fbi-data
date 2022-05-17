@@ -61,7 +61,7 @@
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: left;
-        background-color: #04AA6D;
+        background-color: #1f77b4;
         color: white;
         }
         </style>
@@ -124,8 +124,9 @@
                     {{ detail_block("Metropolitan area", report.msa.msa_name, report, report.msa) }}
                 </div>
                 <div id="individual-agencies">
+                    <h3>Individual Police Agencies</h3>
                     {% for agency_info in report.core_agencies %}
-                        {{ detail_block(agency_info.agency_name.title(), agency_info.agency_name.title(), report, agency_info) }}
+                        {{ detail_block(agency_info.agency_name.title(), agency_info.agency_name.title(), report, agency_info, "h4") }}
                     {% endfor %}
                 </div>
                 <div id="definitions">
