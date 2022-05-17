@@ -110,6 +110,13 @@
                             </li>
                             <li>
                                 <a href="#individual-agencies">Individual Agencies</a>
+                                <ol>
+                                    {% for agency_info in report.core_agencies %}
+                                        <li>
+                                            <a href="#{{ agency_info.title.lower()|replace(" ", "-") }}">{{ agency_info.title.title() }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ol>
                             </li>
                         </ol>
                     </li>

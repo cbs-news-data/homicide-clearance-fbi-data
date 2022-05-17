@@ -17,7 +17,7 @@
     {{ report.national_clearance_rate }}%.
 {% endmacro %}
 {% macro detail_block(title, descriptor, report, data, header_level="h3") %}
-    <{{ header_level }}>{{ title }}</{{ header_level }}>
+    <{{ header_level }} id={{ title.lower()|replace(" ", "-") }}>{{ title }}</{{ header_level }}>
     {{ trend_description(descriptor, report, data) }}
     <div class="chart-wrapper">{{ data.annual_chart_svg }}</div>
     <div class="table-wrapper">{{ data.comparison_chart_html }}</div>
