@@ -72,7 +72,7 @@ class Report:
 
     def __init__(self, market_name):
         env = jinja2.Environment(loader=jinja2.FileSystemLoader("./templates/"))
-        self.template = env.get_template("reta_local.html.j2")
+        self.template = env.get_template("base.j2")
 
         self.market_name = market_name
         self.market_name_snake_case = re.sub(
