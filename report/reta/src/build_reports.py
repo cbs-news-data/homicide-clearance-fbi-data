@@ -3,6 +3,7 @@
 from datetime import datetime
 from io import StringIO
 import re
+from textwrap import wrap
 import jinja2
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -47,6 +48,11 @@ def format_pct(pct):
         raise TypeError(f"cannot format {type(pct)} value {pct}")
 
     return round(pct * 100, 1)
+
+
+def word_wrap_title(title):
+    """accomodates long titles by breaking at 60 characters"""
+    return "\n".join(wrap(title, 60))
 
 
 agency = pd.read_csv("input/agency.csv")
@@ -225,6 +231,7 @@ def get_plot_svg(df, **kwargs):
     """runs dataframe.plot with styling and gets the svg text"""
     string_io = StringIO()
     df.plot(
+        title=word_wrap_title(kwargs.pop("title", None)),
         figsize=kwargs.pop("figsize", (7, 4.5)),
         legend=kwargs.pop("legend", True),
         xlabel=kwargs.pop("xlabel", "Year"),
