@@ -90,6 +90,13 @@ class Report:
         self.data = {"national_clearance_rate": national_clearance_rate}
         self.get_data()
 
+    def __enter__(self):
+        self.get_data()
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        pass
+
     def get_data(self):
         """populates data for a report"""
 
@@ -259,5 +266,5 @@ def get_table_html(df, **kwargs):
 
 if __name__ == "__main__":
     for market in markets:
-        report = Report(market)
-        report.build_html_report()
+        with Report(market) as report:
+            report.build_html_report()
