@@ -78,7 +78,10 @@ class Report:
     """builds an HTML report for a given market"""
 
     def __init__(self, market_name):
-        env = jinja2.Environment(loader=jinja2.FileSystemLoader("./templates/"))
+        env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader("./templates/"),
+            undefined=jinja2.StrictUndefined,
+        )
         self.template = env.get_template("base.j2")
 
         self.market_name = market_name
