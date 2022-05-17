@@ -1,0 +1,24 @@
+{% macro trend_description(geography, report, data) %}
+    In 2020, the clearance rate for {{ geography }}
+    {% if data.clearance_rate_2020_change > 0 %}
+        <span class="text-improved">rose</span>
+    {% else %}
+        <span class="text-worsened">fell</span>
+    {% endif %}
+    to {{ data.clearance_rate_2020 }}% compared to
+    the previous 5 years. That's
+    {{ data.compared_to_national | abs }}%
+    {% if data.compared_to_national > 0 %}
+        <span class="text-improved">greater</span>
+    {% else %}
+        <span class="text-worsened">less</span>
+    {% endif %}
+    than the national average of
+    {{ report.national_clearance_rate }}%.
+{% endmacro %}
+{% macro detail_block(title, descriptor, report, data) %}
+    <h3>{{ title }}</h3>
+    {{ trend_description("the state", report, data) }}
+    <div class="chart-wrapper">{{ data.plot_svg }}</div>
+    <div class="table-wrapper">{{ data.table_html }}</div>
+{% endmacro %}

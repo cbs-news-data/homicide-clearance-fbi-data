@@ -1,3 +1,4 @@
+{% from "macros.j2" import trend_description, detail_block %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -114,46 +115,11 @@
                     <h3>Summary</h3>
                     {% for agency_info in report.core_agencies %}
                         <p>
-                            In 2020, the clearance rate for
-                            {{ agency_info.agency_name.title() }}
-                            {% if agency_info.clearance_rate_2020_change > 0 %}
-                                <span class="text-improved">rose</span>
-                            {% else %}
-                                <span class="text-worsened">fell</span>
-                            {% endif %}
-                            to {{ agency_info.clearance_rate_2020 }}% compared to
-                            the previous 5 years. That's
-                            {{ agency_info.compared_to_national | abs }}%
-                            {% if agency_info.compared_to_national > 0 %}
-                                <span class="text-improved">greater</span>
-                            {% else %}
-                                <span class="text-worsened">less</span>
-                            {% endif %}
-                            than the national average of
-                            {{ report.national_clearance_rate }}%.
+                            {{ trend_description(agency_info.agency_name.title(), report, agency_info) }}
                         </p>
                     {% endfor %}
                 </div>
-                <div id="state-level-data">
-                    <h3>State-Level Data</h3>
-                    Statewide, the 2020 clearance rate
-                    {% if report.state.clearance_rate_2020_change > 0 %}
-                        <span class="text-improved">rose</span>
-                    {% else %}
-                        <span class="text-worsened">fell</span>
-                    {% endif %}
-                    to {{ report.state.clearance_rate_2020 }}% compared to
-                    the previous 5 years.
-                    That's {{ report.state.compared_to_national|abs }}%
-                    {% if report.state.compared_to_national > 0 %}
-                        <span class="text-improved">greater</span>
-                    {% else %}
-                        <span class="text-worsened">less</span>
-                    {% endif %}
-                    than the national average of {{ report.national_clearance_rate }}%.
-                    <div class="chart-wrapper">{{ report.state.plot_svg }}</div>
-                    <div class="table-wrapper">{{ report.state.table_html }}</div>
-                </div>
+                <div id="state-level-data">{{ detail_block("State-Level Data", "Statewide", report, report.state) }}</div>
             </div>
             <div id="definitions">
                 <h2>Definitions</h2>
@@ -175,15 +141,11 @@
                     expert that you can't answer based on the information below,
                     <a href="mailto:cmhacker@viacomcbs.com">contact me</a>.
                 </p>
-                <h3>
-                    Data Source
-                </h3>
+                <h3>Data Source</h3>
                 <p>
                     blah blah blah
                 </p>
-                <h3>
-                    Data Preparation
-                </h3>
+                <h3>Data Preparation</h3>
                 <p>
                     blah blah blah
                 </p>
