@@ -123,7 +123,7 @@ class Report:
                             state_abbr=self.market_data["state_abbr"],
                         )
                     ),
-                    "plot_svg": get_plot_svg(
+                    "annual_chart_svg": get_chart_svg(
                         get_data(
                             df=state,
                             column="clearance_rate",
@@ -135,7 +135,7 @@ class Report:
                         title=f"{self.market_data['state_abbr']} "
                         "statewide homicide clearance rate",
                     ),
-                    "table_html": get_table_html(
+                    "annual_table_html": get_table_html(
                         get_data(
                             df=state,
                             index_col="year",
@@ -161,7 +161,7 @@ class Report:
                             msa_name=self.market_data["msa_name"],
                         )
                     ),
-                    "plot_svg": get_plot_svg(
+                    "annual_chart_svg": get_chart_svg(
                         get_data(
                             df=msa,
                             column="clearance_rate",
@@ -172,7 +172,7 @@ class Report:
                         * 100,
                         title=f"{self.market_data['msa_name']} homicide clearance rate",
                     ),
-                    "table_html": get_table_html(
+                    "annual_table_html": get_table_html(
                         get_data(
                             df=msa,
                             index_col="year",
@@ -211,7 +211,7 @@ class Report:
                         agency_name=agency_info["agency_name"],
                     )
                 ),
-                "plot_svg": get_plot_svg(
+                "annual_chart_svg": get_chart_svg(
                     get_data(
                         df=agency,
                         column="clearance_rate",
@@ -222,7 +222,7 @@ class Report:
                     ),
                     title=f"{agency_info['agency_name']} homicide clearance rate",
                 ),
-                "table_html": get_table_html(
+                "annual_table_html": get_table_html(
                     get_data(
                         df=agency,
                         index_col="year",
@@ -257,7 +257,7 @@ def compare_to_national(num):
     return format_pct((num - national_clearance_rate) / national_clearance_rate)
 
 
-def get_plot_svg(df, **kwargs):
+def get_chart_svg(df, **kwargs):
     """runs dataframe.plot with styling and gets the svg text"""
     string_io = StringIO()
     df.plot(
