@@ -136,8 +136,15 @@
                 </div>
                 <div id="state-level-data">
                     <h3>State-Level Data</h3>
-                    Statewide, the 2020 clearance rate was
-                    {{ report.state.clearance_rate_2020 }}%. That's {{ report.state.compared_to_national|abs }}%
+                    Statewide, the 2020 clearance rate
+                    {% if report.state.clearance_rate_2020_change > 0 %}
+                        <span class="text-improved">rose</span>
+                    {% else %}
+                        <span class="text-worsened">fell</span>
+                    {% endif %}
+                    to {{ report.state.clearance_rate_2020 }}% compared to
+                    the previous 5 years.
+                    That's {{ report.state.compared_to_national|abs }}%
                     {% if report.state.compared_to_national > 0 %}
                         <span class="text-improved">greater</span>
                     {% else %}
@@ -168,7 +175,9 @@
                     expert that you can't answer based on the information below,
                     <a href="mailto:cmhacker@viacomcbs.com">contact me</a>.
                 </p>
-                <h3>Data Source</h3>
+                <h3>
+                    Data Source
+                </h3>
                 <p>
                     blah blah blah
                 </p>

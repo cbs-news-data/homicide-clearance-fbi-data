@@ -99,6 +99,13 @@ class Report:
                             state_abbr=self.market_data["state_abbr"],
                         )
                     ),
+                    "clearance_rate_2020_change": format_pct(
+                        get_data(
+                            df=state_5yr,
+                            column="change",
+                            state_abbr=self.market_data["state_abbr"],
+                        )
+                    ),
                     "plot_svg": get_plot_svg(
                         get_data(
                             df=state,
