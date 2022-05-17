@@ -11,14 +11,7 @@ import yaml
 
 
 def get_data(df, column=None, index_col=None, single_value=True, **kwargs):
-    """filters a dataframe based on kwargs and returns column from the resulting row
-
-    Args:
-        df (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
+    """filters a dataframe based on kwargs and returns column from the resulting row"""
     query_string = []
     for kwarg, val in kwargs.items():
         if isinstance(val, str):
