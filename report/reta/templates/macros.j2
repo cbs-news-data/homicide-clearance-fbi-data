@@ -19,6 +19,6 @@
 {% macro detail_block(title, descriptor, report, data, header_level="h3") %}
     <{{ header_level }}>{{ title }}</{{ header_level }}>
     {{ trend_description(descriptor, report, data) }}
-    <div class="chart-wrapper">{{ data.plot_svg }}</div>
-    <div class="table-wrapper">{{ data.table_html }}</div>
+    <div class="chart-wrapper">{{ data.annual_chart_svg }}</div>
+    <div class="table-wrapper">{{ data.annual_table_html }}</div>
 {% endmacro %}

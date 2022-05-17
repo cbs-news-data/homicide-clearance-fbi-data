@@ -115,18 +115,18 @@
                     <h3>Summary</h3>
                     {% for agency_info in report.core_agencies %}
                         <p>
-                            {{ trend_description(agency_info.agency_name.title(), report, agency_info) }}
+                            {{ trend_description(agency_info.title.title(), report, agency_info) }}
                         </p>
                     {% endfor %}
                 </div>
                 <div id="state-level-data">{{ detail_block("State-Level Data", "the state", report, report.state) }}</div>
                 <div id="metropolitan-statistical-area">
-                    {{ detail_block("Metropolitan area", report.msa.msa_name, report, report.msa) }}
+                    {{ detail_block("Metropolitan area", report.msa.title, report, report.msa) }}
                 </div>
                 <div id="individual-agencies">
                     <h3>Individual Police Agencies</h3>
                     {% for agency_info in report.core_agencies %}
-                        {{ detail_block(agency_info.agency_name.title(), agency_info.agency_name.title(), report, agency_info, "h4") }}
+                        {{ detail_block(agency_info.title.title(), agency_info.title.title(), report, agency_info, "h4") }}
                     {% endfor %}
                 </div>
                 <div id="definitions">

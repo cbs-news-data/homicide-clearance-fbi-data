@@ -107,137 +107,28 @@ class Report:
             {
                 "market_name": self.market_name,
                 "generated_date": run_timestamp,
-                "state": {
-                    "state_abbr": self.market_data["state_abbr"],
-                    "clearance_rate_2020": format_pct(
-                        get_data(
-                            df=state_2020,
-                            column="clearance_rate",
-                            state_abbr=self.market_data["state_abbr"],
-                        )
-                    ),
-                    "clearance_rate_2020_change": format_pct(
-                        get_data(
-                            df=state_5yr,
-                            column="change",
-                            state_abbr=self.market_data["state_abbr"],
-                        )
-                    ),
-                    "annual_chart_svg": get_chart_svg(
-                        get_data(
-                            df=state,
-                            column="clearance_rate",
-                            index_col="year",
-                            single_value=False,
-                            state_abbr=self.market_data["state_abbr"],
-                        )
-                        * 100,
-                        title=f"{self.market_data['state_abbr']} "
-                        "statewide homicide clearance rate",
-                    ),
-                    "annual_table_html": get_table_html(
-                        get_data(
-                            df=state,
-                            index_col="year",
-                            single_value=False,
-                            state_abbr=self.market_data["state_abbr"],
-                        ),
-                        columns=["Actual", "Cleared", "Clearance Rate"],
-                    ),
-                },
-                "msa": {
-                    "msa_name": self.market_data["msa_name"],
-                    "clearance_rate_2020": format_pct(
-                        get_data(
-                            df=msa_2020,
-                            column="clearance_rate",
-                            msa_name=self.market_data["msa_name"],
-                        )
-                    ),
-                    "clearance_rate_2020_change": format_pct(
-                        get_data(
-                            df=msa_5yr,
-                            column="change",
-                            msa_name=self.market_data["msa_name"],
-                        )
-                    ),
-                    "annual_chart_svg": get_chart_svg(
-                        get_data(
-                            df=msa,
-                            column="clearance_rate",
-                            index_col="year",
-                            single_value=False,
-                            msa_name=self.market_data["msa_name"],
-                        )
-                        * 100,
-                        title=f"{self.market_data['msa_name']} homicide clearance rate",
-                    ),
-                    "annual_table_html": get_table_html(
-                        get_data(
-                            df=msa,
-                            index_col="year",
-                            single_value=False,
-                            msa_name=self.market_data["msa_name"],
-                        ),
-                        columns=["Actual", "Cleared", "Clearance Rate"],
-                    ),
-                },
+                "state": get_single_data(
+                    "state",
+                    self.market_data["state_abbr"],
+                    state_abbr=self.market_data["state_abbr"],
+                ),
+                "msa": get_single_data(
+                    "msa",
+                    self.market_data["msa_name"],
+                    msa_name=self.market_data["msa_name"],
+                ),
                 "core_agencies": [],
             }
         )
 
-        for field in ["state", "msa"]:
-            self.data[field]["compared_to_national"] = compare_to_national(
-                self.data[field]["clearance_rate_2020"]
-            )
-
         # core agencies
         for agency_info in self.market_data["core_agencies"]:
-            adata = {
-                "agency_name": agency_info["agency_name"],
-                "clearance_rate_2020": format_pct(
-                    get_data(
-                        df=agency_2020,
-                        column="clearance_rate",
-                        ori_code=agency_info["ori_code"],
-                        agency_name=agency_info["agency_name"],
-                    )
-                ),
-                "clearance_rate_2020_change": format_pct(
-                    get_data(
-                        df=agency_5yr,
-                        column="change",
-                        ori_code=agency_info["ori_code"],
-                        agency_name=agency_info["agency_name"],
-                    )
-                ),
-                "annual_chart_svg": get_chart_svg(
-                    get_data(
-                        df=agency,
-                        column="clearance_rate",
-                        index_col="year",
-                        single_value=False,
-                        ori_code=agency_info["ori_code"],
-                        agency_name=agency_info["agency_name"],
-                    ),
-                    title=f"{agency_info['agency_name']} homicide clearance rate",
-                ),
-                "annual_table_html": get_table_html(
-                    get_data(
-                        df=agency,
-                        index_col="year",
-                        single_value=False,
-                        ori_code=agency_info["ori_code"],
-                        agency_name=agency_info["agency_name"],
-                    ),
-                    columns=["Actual", "Cleared", "Clearance Rate"],
-                ),
-            }
-            adata["compared_to_national"] = format_pct(
-                (adata["clearance_rate_2020"] - national_clearance_rate)
-                / national_clearance_rate
+            adata = get_single_data(
+                "agency",
+                agency_info["agency_name"].title(),
+                ori_code=agency_info["ori_code"],
+                agency_name=agency_info["agency_name"],
             )
-
             self.data["core_agencies"].append(adata)
 
     def build_html_report(self):
@@ -250,6 +141,47 @@ class Report:
             encoding="utf-8",
         ) as outfile:
             outfile.write(html)
+
+
+def get_single_data(geography, title, **selectors):
+    """gets a dictionary containing the data needed to populate the template
+
+    Args:
+        geography (str): type of geography to use
+        title (str): title of data
+
+    Returns:
+        dict: dict of template data
+    """
+    annual_df = globals()[geography]
+    data = {
+        "title": title,
+        "clearance_rate_2020": format_pct(
+            get_data(
+                df=globals()[f"{geography}_2020"], column="clearance_rate", **selectors
+            )
+        ),
+        "clearance_rate_2020_change": format_pct(
+            get_data(df=globals()[f"{geography}_5yr"], column="change", **selectors)
+        ),
+        "annual_chart_svg": get_chart_svg(
+            get_data(
+                df=annual_df,
+                column="clearance_rate",
+                index_col="year",
+                single_value=False,
+                **selectors,
+            )
+            * 100,
+            title=f"{title} homicide clearance rate",
+        ),
+        "annual_table_html": get_table_html(
+            get_data(df=annual_df, index_col="year", single_value=False, **selectors),
+            columns=["Actual", "Cleared", "Clearance Rate"],
+        ),
+    }
+    data["compared_to_national"] = compare_to_national(data["clearance_rate_2020"])
+    return data
 
 
 def compare_to_national(num):
