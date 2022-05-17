@@ -1,6 +1,9 @@
 black
 csvkit
+Django
+Jinja2
 jupyter
+matplotlib
 pandas
 pylint
 pyyaml
