@@ -73,6 +73,18 @@
                 background-color: #1f77b4;
                 color: white;
             }
+
+            .definition-item {
+                margin-bottom: 15px;
+            }
+
+            .note {
+                margin-left: 20px;
+            }
+
+            .italic {
+                font-style: italic;
+            }
         </style>
     </head>
     <body>
@@ -172,35 +184,114 @@
                 </div>
                 <div id="definitions">
                     <h2>Definitions</h2>
-                    <ul>
-                        <li></li>
-                    </ul>
-                </div>
-                <div id="methodology">
-                    <h2>Methodology</h2>
-                    <p>
-                        A full methodology and source code will be published at the
-                        conclusion of this project. This section serves to provide
-                        explanations of the basic process used to analyze this data so
-                        your station can answer any questions that may arise from law
-                        enforcement agencies.
-                    </p>
-                    <p>
-                        If you have additional questions or get a question from an agency
-                        or expert that you can't answer based on the information below,
-                        <a href="mailto:cmhacker@viacomcbs.com">contact me</a>.
-                    </p>
-                    <h3>Data Source</h3>
-                    <p>
-                        blah blah blah
-                    </p>
-                    <h3>Data Preparation</h3>
-                    <p>
-                        blah blah blah
-                    </p>
-                </div>
+                    <div id="definitions">
+                        <ul>
+                            <li class="definition-item">
+                                <b>Clearance</b>: The FBI defines "clearance" as a case that a
+                                law enforcement agency has closed one of two ways: by arrest
+                                or "exceptional means."
+                                <div class="note">
+                                    <p>
+                                        Cleared by arrest means one or more arrests were made, the
+                                        offender has been charged with the offense and the
+                                        offender has been turned over to the court for
+                                        prosecution.
+                                    </p>
+                                    <p>
+                                        A case that is cleared by "exceptional means" is a case in
+                                        which "elements beyond law enforcement's control prevent
+                                        the agency from arresting and formally charging the
+                                        offender." According to
+                                    <a href="https://ucr.fbi.gov/crime-in-the-u.s/2013/crime-in-the-u.s.-2013/offenses-known-to-law-enforcement/clearances/clearancetopic_final"
+                                       target="_blank">FBI guidelines,</a
+                                    >, police must have identified the offender, gathered
+                                    enough evidence that they <i>could</i> have made an
+                                    arrest, and identified the offender's exact location so
+                                    they could be taken into custody if it weren't for those
+                                    circumstances that prevented them from doing so.
+                                </p>
+                            </div>
+                        </li>
+                        <li class="definition-item">
+                            <b>Clearance rate</b>: The number of new homicides that a law
+                            enforcement agency reported in a given year, divided by the
+                            number of homicides they cleared.
+                            <p class="note">
+                                <b>NOTE: </b> this is not the same as the number of
+                                homicides in a given year that were actually recorded.
+                            </p>
+                        </li>
+                        <li class="definition-item">
+                            <b>Metropolitan Statistical Area</b>: a geographic area
+                            defined by the
+                        <a href="https://www.census.gov/programs-surveys/metro-micro/about.html"
+                           target="_blank">US Census Bureau</a
+                        >
+                        as place that has at least one urbanized area of 50,000 people
+                        or more.
+                    </li>
+                    <li class="definition-item">
+                        <b>Actual</b>: In this report, "Actual" refers to the total
+                        number of homicides the agency reported.
+                    </li>
+                    <li class="definition-item">
+                        <b>2015-2019 Average</b>: The average clearance rate for the
+                        years 2015-2019.
+                    </li>
+                </ul>
             </div>
         </div>
+        <div id="methodology">
+            <h2>Methodology</h2>
+            <p>
+                A full methodology and source code will be published at the
+                conclusion of this project. This section serves to provide
+                explanations of the basic process used to analyze this data so
+                your station can answer any questions that may arise from law
+                enforcement agencies.
+            </p>
+            <p>
+                If you have additional questions or get a question from an agency
+                or expert that you can't answer based on the information below,
+                <a href="mailto:cmhacker@viacomcbs.com">contact me</a>.
+            </p>
+            <h3>Data Source</h3>
+            <p>
+                Clearance rates were calculated using the FBI's "Return A" master
+                files, which contain monthly totals of all offenses reported to
+                each law enforcement agency in the country.
+            </p>
+            <h3>Data Preparation</h3>
+            <p>
+                The original data was contained in fixed-width text files
+                containing one row per agency per month. The files were converted
+                into a more modern .csv format and cleaned.
+            </p>
+            <h4>Agency selection</h4>
+            <p>
+                This analysis does not include all agencies that reported data to
+                the FBI. Rather,
+                <b >only agencies that reported at least one clearance in at least
+                23 out of the 26 years analyzed in this report are included.</b
+                >
+                This is primarily because the data doesn't distinguish between
+                agencies that actually cleared zero offenses and agencies that
+                don't report clearance numbers at all. For example, the Chicago
+                Police Department does not report any clearance data to the FBI,
+                but it <i>does</i> report actual homicide numbers. This means that
+                any calculation of clearance rates that includes that department
+                will have a lower clearance rate than actually occurred.
+            </p>
+            <p class="note italic">
+                For more information, see
+            <a href="https://www.ojp.gov/pdffiles1/nij/grants/215343.pdf">Analysis of Missingness in UCR Crime Data</a
+            >
+            by Michael D. Maltz at the Criminal Justice Research Center at
+            Ohio State University.
+        </p>
     </div>
+</div>
+</div>
+</div>
 </body>
 </html>
