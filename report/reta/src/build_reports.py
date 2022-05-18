@@ -81,7 +81,7 @@ class Report:
 
         self.market_name = market_name
         self.market_name_snake_case = re.sub(
-            r"\s{2,}", "_", self.market_name.lower().strip()
+            r"\s{1,}", "_", self.market_name.lower().strip()
         )
 
         self.market_data = markets[self.market_name]
