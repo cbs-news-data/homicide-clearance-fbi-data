@@ -68,6 +68,10 @@ run_timestamp = datetime.now().strftime("%Y-%m-%d at %H:%M %p")
 
 national_clearance_rate = format_pct(get_data(national, "clearance_rate", year=2020))
 
+national = national.set_index("year")[["clearance_rate"]].rename(
+    columns={"clearance_rate": "national"}
+)
+
 
 class Report:
     """builds an HTML report for a given market"""
@@ -168,6 +172,7 @@ def get_single_data(geography, title, **selectors):
                 **selectors,
             ),
             title=f"{title} Homicide Clearance Rate",
+            label=title,
         ),
         "annual_table_html": get_table_html(
             get_data(df=df_annual, index_col="year", single_value=False, **selectors),
@@ -191,21 +196,20 @@ def compare_to_national(num):
     return format_pct((num - national_clearance_rate) / national_clearance_rate)
 
 
-def get_chart_html(df, title):
+def get_chart_html(df, title, label):
     """runs dataframe.plot with styling and gets the svg text"""
     string_io = StringIO()
-    chart = (
-        df[["clearance_rate"]]
-        .multiply(100)
-        .plot(
-            title=word_wrap_title(title),
-            height=500,
-            legend="top",
-            xlabel="Year",
-            ylabel="Clearance rate",
-            backend="hvplot",
-            rot=90,
-        )
+    chart_df = (
+        df[["clearance_rate"]].rename(columns={"clearance_rate": label}).join(national)
+    )
+    chart = chart_df.multiply(100).plot(
+        title=word_wrap_title(title),
+        height=500,
+        legend="top",
+        xlabel="Year",
+        ylabel="Clearance rate",
+        backend="hvplot",
+        rot=90,
     )
     hvplot.save(chart, string_io)
     return string_io.getvalue()
