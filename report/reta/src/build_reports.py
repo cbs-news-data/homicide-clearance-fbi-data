@@ -26,7 +26,9 @@ def get_data(df, column=None, index_col=None, single_value=True, **kwargs):
         res = res.set_index(index_col)
 
     if single_value is True:
-        assert len(res) == 1, f"query result should have 1 row, got {len(res)}"
+        assert (
+            len(res) == 1
+        ), f"query result should have 1 row, got {len(res)}. params were {kwargs}"
         assert column is not None, "must pass a column to obtain a single value"
         return res.iloc[0][column]
 
@@ -118,9 +120,9 @@ class Report:
         for agency_info in self.market_data["core_agencies"]:
             adata = get_single_data(
                 "agency",
-                agency_info["agency_name"].title(),
+                agency_info["ncic_agency_name"].title(),
                 ori_code=agency_info["ori_code"],
-                agency_name=agency_info["agency_name"],
+                ncic_agency_name=agency_info["ncic_agency_name"],
             )
             self.data["core_agencies"].append(adata)
 
