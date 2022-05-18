@@ -158,15 +158,13 @@ def get_single_data(geography, title, **selectors):
         "clearance_rate_2020_change": format_pct(
             get_data(df=df_5yr, column="change", **selectors)
         ),
-        "annual_chart_svg": get_chart_svg(
+        "annual_chart_svg": get_chart_html(
             get_data(
                 df=df_annual,
-                column="clearance_rate",
                 index_col="year",
                 single_value=False,
                 **selectors,
-            )
-            * 100,
+            ),
             title=f"{title} Homicide Clearance Rate",
         ),
         "annual_table_html": get_table_html(
@@ -191,19 +189,23 @@ def compare_to_national(num):
     return format_pct((num - national_clearance_rate) / national_clearance_rate)
 
 
-def get_chart_svg(df, **kwargs):
+def get_chart_html(df, title):
     """runs dataframe.plot with styling and gets the svg text"""
     string_io = StringIO()
-    curve = df.plot(
-        title=word_wrap_title(kwargs.pop("title", None)),
-        height=kwargs.pop("height", 500),
-        legend=kwargs.pop("legend", True),
-        xlabel=kwargs.pop("xlabel", "Year"),
-        ylabel=kwargs.pop("ylabel", "Clearance rate"),
-        backend=kwargs.pop("backend", "hvplot"),
-        **kwargs,
+    chart = (
+        df[["clearance_rate"]]
+        .multiply(100)
+        .plot(
+            title=word_wrap_title(title),
+            height=500,
+            legend="top",
+            xlabel="Year",
+            ylabel="Clearance rate",
+            backend="hvplot",
+            rot=90,
+        )
     )
-    hvplot.save(curve, string_io)
+    hvplot.save(chart, string_io)
     return string_io.getvalue()
 
 
