@@ -1,6 +1,7 @@
 black
 csvkit
 Django
+hvplot
 Jinja2
 jupyter
 matplotlib
