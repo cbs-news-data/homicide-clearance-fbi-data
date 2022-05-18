@@ -1,11 +1,11 @@
 {% macro trend_description(geography, report, data) %}
-    In 2020, the clearance rate for {{ geography }}
-    {% if data.clearance_rate_2020_change > 0 %}
+    In {{ data.max_complete_year }}, the clearance rate for {{ geography }}
+    {% if data.clearance_rate_latest_change > 0 %}
         <span class="text-improved">rose</span>
     {% else %}
         <span class="text-worsened">fell</span>
     {% endif %}
-    to {{ data.clearance_rate_2020 }}% compared to
+    to {{ data.clearance_rate_latest }}% compared to
     the previous 5 years. That's
     {{ data.compared_to_national | abs }}%
     {% if data.compared_to_national > 0 %}
@@ -18,6 +18,11 @@
 {% endmacro %}
 {% macro detail_block(title, descriptor, report, data, header_level="h3") %}
     <{{ header_level }} id={{ title.lower()|replace(" ", "-") }}>{{ title }}</{{ header_level }}>
+    {% if data.max_complete_year < 2020 %}
+        <p class="note alert">
+            Data for {{ title }} was only available through {{ data.max_complete_year }}
+        </p>
+    {% endif %}
     {{ trend_description(descriptor, report, data) }}
     <div class="chart-wrapper">{{ data.annual_chart_svg }}</div>
     <div class="table-wrapper">{{ data.comparison_chart_html }}</div>

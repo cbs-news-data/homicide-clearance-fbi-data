@@ -85,3 +85,10 @@ Philadelphia:
   core_agencies:
     - ori_code: PAPEP0000
       ncic_agency_name: PHILADELPHIA POLICE DEPARTMENT POLICE ADMIN
+
+Pittsburgh:
+  state_abbr: PA
+  msa_name: Pittsburgh, PA
+  core_agencies:
+    - ori_code: PAPPD0000
+      ncic_agency_name: PD PITTSBURGH

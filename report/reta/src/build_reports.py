@@ -51,14 +51,14 @@ def word_wrap_title(title):
 
 
 agency = pd.read_csv("input/agency.csv")
-agency_2020 = pd.read_csv("input/agency_2020.csv")
+agency_latest = pd.read_csv("input/agency_latest.csv")
 agency_5yr = pd.read_csv("input/agency_5yr.csv")
 msa = pd.read_csv("input/msa.csv")
-msa_2020 = pd.read_csv("input/msa_2020.csv")
+msa_latest = pd.read_csv("input/msa_latest.csv")
 msa_5yr = pd.read_csv("input/msa_5yr.csv")
 national = pd.read_csv("input/national.csv")
 state = pd.read_csv("input/state.csv")
-state_2020 = pd.read_csv("input/state_2020.csv")
+state_latest = pd.read_csv("input/state_latest.csv")
 state_5yr = pd.read_csv("input/state_5yr.csv")
 
 with open("hand/markets.yaml", "r", encoding="utf-8") as file:
@@ -153,15 +153,18 @@ def get_single_data(geography, title, **selectors):
         dict: dict of template data
     """
     df_annual = globals()[geography]
-    df_2020 = globals()[f"{geography}_2020"]
+    df_latest = globals()[f"{geography}_latest"]
     df_5yr = globals()[f"{geography}_5yr"]
 
     data = {
         "title": title,
-        "clearance_rate_2020": format_pct(
-            get_data(df=df_2020, column="clearance_rate", **selectors)
+        "max_complete_year": get_data(
+            df_latest, column="latest_year", single_value=True, **selectors
         ),
-        "clearance_rate_2020_change": format_pct(
+        "clearance_rate_latest": format_pct(
+            get_data(df=df_latest, column="clearance_rate", **selectors)
+        ),
+        "clearance_rate_latest_change": format_pct(
             get_data(df=df_5yr, column="change", **selectors)
         ),
         "annual_chart_svg": get_chart_html(
@@ -179,10 +182,10 @@ def get_single_data(geography, title, **selectors):
             columns=["Actual", "Cleared", "Clearance Rate"],
         ),
     }
-    data["compared_to_national"] = compare_to_national(data["clearance_rate_2020"])
+    data["compared_to_national"] = compare_to_national(data["clearance_rate_latest"])
     data["comparison_chart_html"] = get_table_html(
         get_data(
-            df=df_5yr.rename(columns={"2015_2019_avg": "2015-2019 Average"}),
+            df=df_5yr.rename(columns={"5_year_avg": "5-Year Average"}),
             index_col=list(selectors.keys()),
             single_value=False,
             **selectors,
@@ -217,7 +220,7 @@ def get_chart_html(df, title, label):
 
 def get_table_html(df, **kwargs):
     """runs dataframe.to_html with styling and returns the html"""
-    pct_cols = ["2015-2019 Average", "clearance_rate", "2020", "change"]
+    pct_cols = ["5-Year Average", "clearance_rate", "latest", "change"]
     for col in pct_cols:
         if col in df.columns:
             df[col] = df[col].multiply(100).round(1).astype(str) + "%"
