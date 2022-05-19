@@ -16,15 +16,21 @@
     than the national average of
     {{ report.national_clearance_rate }}%.
 {% endmacro %}
-{% macro detail_block(title, descriptor, report, data, header_level="h3") %}
+{% macro detail_block(title, descriptor, report, data, header_level="h3", subtitle=none) %}
     <{{ header_level }} id={{ title.lower()|replace(" ", "-") }}>{{ title }}</{{ header_level }}>
     {% if data.max_complete_year < 2020 %}
         <p class="note alert">
             Data for {{ title }} was only available through {{ data.max_complete_year }}
         </p>
     {% endif %}
-    {{ trend_description(descriptor, report, data) }}
+    {% if data.annual_only == false %}
+        {{ trend_description(descriptor, report, data) }}
+    {% else %}
+        <p>{{ subtitle }}</p>
+    {% endif %}
     <div class="chart-wrapper">{{ data.annual_chart_svg }}</div>
-    <div class="table-wrapper">{{ data.comparison_chart_html }}</div>
+    {% if data.annual_only == false %}
+        <div class="table-wrapper">{{ data.comparison_chart_html }}</div>
+    {% endif %}
     <div class="table-wrapper">{{ data.annual_table_html }}</div>
 {% endmacro %}

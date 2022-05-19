@@ -20,17 +20,20 @@ def get_data(df, column=None, index_col=None, single_value=True, **kwargs):
             val_str = f"{val}"
         query_string.append(f"({kwarg} == {val_str})")
 
-    res = df.query("&".join(query_string))
+    if len(query_string) == 0:
+        res = df
+    else:
+        res = df.query("&".join(query_string))
 
-    if index_col is not None:
-        res = res.set_index(index_col)
+        if index_col is not None:
+            res = res.set_index(index_col)
 
-    if single_value is True:
-        assert (
-            len(res) == 1
-        ), f"query result should have 1 row, got {len(res)}. params were {kwargs}"
-        assert column is not None, "must pass a column to obtain a single value"
-        return res.iloc[0][column]
+        if single_value is True:
+            assert (
+                len(res) == 1
+            ), f"query result should have 1 row, got {len(res)}. params were {kwargs}"
+            assert column is not None, "must pass a column to obtain a single value"
+            return res.iloc[0][column]
 
     if column is None:
         return res
@@ -68,9 +71,7 @@ run_timestamp = datetime.now().strftime("%Y-%m-%d at %H:%M %p")
 
 national_clearance_rate = format_pct(get_data(national, "clearance_rate", year=2020))
 
-national = national.set_index("year")[["clearance_rate"]].rename(
-    columns={"clearance_rate": "national"}
-)
+national = national.set_index("year")
 
 
 class Report:
@@ -106,6 +107,7 @@ class Report:
             {
                 "market_name": self.market_name,
                 "generated_date": run_timestamp,
+                "national": get_single_data("national", "National", annual_only=True),
                 "state": get_single_data(
                     "state",
                     self.market_data["state_abbr"],
@@ -142,7 +144,7 @@ class Report:
             outfile.write(html)
 
 
-def get_single_data(geography, title, **selectors):
+def get_single_data(geography, title, annual_only=False, **selectors):
     """gets a dictionary containing the data needed to populate the template
 
     Args:
@@ -153,20 +155,12 @@ def get_single_data(geography, title, **selectors):
         dict: dict of template data
     """
     df_annual = globals()[geography]
-    df_latest = globals()[f"{geography}_latest"]
-    df_5yr = globals()[f"{geography}_5yr"]
+    if not annual_only:
+        df_latest = globals()[f"{geography}_latest"]
+        df_5yr = globals()[f"{geography}_5yr"]
 
     data = {
         "title": title,
-        "max_complete_year": get_data(
-            df_latest, column="latest_year", single_value=True, **selectors
-        ),
-        "clearance_rate_latest": format_pct(
-            get_data(df=df_latest, column="clearance_rate", **selectors)
-        ),
-        "clearance_rate_latest_change": format_pct(
-            get_data(df=df_5yr, column="change", **selectors)
-        ),
         "annual_chart_svg": get_chart_html(
             get_data(
                 df=df_annual,
@@ -176,21 +170,43 @@ def get_single_data(geography, title, **selectors):
             ),
             title=f"{title} Homicide Clearance Rate",
             label=title,
+            national_compare=not annual_only,
         ),
         "annual_table_html": get_table_html(
             get_data(df=df_annual, index_col="year", single_value=False, **selectors),
             columns=["Actual", "Cleared", "Clearance Rate"],
         ),
     }
-    data["compared_to_national"] = compare_to_national(data["clearance_rate_latest"])
-    data["comparison_chart_html"] = get_table_html(
-        get_data(
-            df=df_5yr.rename(columns={"5_year_avg": "5-Year Average"}),
-            index_col=list(selectors.keys()),
-            single_value=False,
-            **selectors,
+
+    if not annual_only:
+        data.update(
+            {
+                "annual_only": False,
+                "max_complete_year": get_data(
+                    df_latest, column="latest_year", single_value=True, **selectors
+                ),
+                "clearance_rate_latest": format_pct(
+                    get_data(df=df_latest, column="clearance_rate", **selectors)
+                ),
+                "clearance_rate_latest_change": format_pct(
+                    get_data(df=df_5yr, column="change", **selectors)
+                ),
+            }
         )
-    )
+        data["compared_to_national"] = compare_to_national(
+            data["clearance_rate_latest"]
+        )
+        data["comparison_chart_html"] = get_table_html(
+            get_data(
+                df=df_5yr.rename(columns={"5_year_avg": "5-Year Average"}),
+                index_col=list(selectors.keys()),
+                single_value=False,
+                **selectors,
+            )
+        )
+    else:
+        data.update({"max_complete_year": 2020, "annual_only": True})
+
     return data
 
 
@@ -199,12 +215,17 @@ def compare_to_national(num):
     return format_pct((num - national_clearance_rate) / national_clearance_rate)
 
 
-def get_chart_html(df, title, label):
+def get_chart_html(df, title, label, national_compare=True):
     """runs dataframe.plot with styling and gets the svg text"""
     string_io = StringIO()
-    chart_df = (
-        df[["clearance_rate"]].rename(columns={"clearance_rate": label}).join(national)
-    )
+
+    chart_df = df[["clearance_rate"]].rename(columns={"clearance_rate": label})
+
+    if national_compare is True:
+        chart_df = chart_df.join(
+            national[["clearance_rate"]].rename(columns={"clearance_rate": "national"})
+        )
+
     chart = chart_df.multiply(100).plot(
         title=word_wrap_title(title),
         height=500,
@@ -220,6 +241,7 @@ def get_chart_html(df, title, label):
 
 def get_table_html(df, **kwargs):
     """runs dataframe.to_html with styling and returns the html"""
+    df = df.copy()
     pct_cols = ["5-Year Average", "clearance_rate", "latest", "change"]
     for col in pct_cols:
         if col in df.columns:

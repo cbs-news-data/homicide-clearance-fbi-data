@@ -133,6 +133,9 @@
                                     <a href="#summary">Summary</a>
                                 </li>
                                 <li>
+                                    <a href="#national-data">National data</a>
+                                </li>
+                                <li>
                                     <a href="#state-level-data">State-Level Data</a>
                                 </li>
                                 <li>
@@ -281,6 +284,15 @@
                     ) }}
                 </p>
             {% endfor %}
+        </div>
+        <div id="national-data">
+            {{ detail_block(
+            "National Data",
+            "the U.S.",
+            report,
+            report.national,
+            subtitle="In the U.S., the overall homicide clearance rate fell to just over 50% in 2021."
+            ) }}
         </div>
         <div id="state-level-data">
             {{ detail_block(
