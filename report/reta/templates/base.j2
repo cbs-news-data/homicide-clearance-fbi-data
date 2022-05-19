@@ -128,29 +128,41 @@
                         <li>
                             <a href="#data">Data</a>
                             <ol>
-                                <li>
-                                    <a href="#summary">Summary</a>
-                                </li>
+                                {% if report.nosummary == false %}
+                                    <li>
+                                        <a href="#summary">Summary</a>
+                                    </li>
+                                {% endif %}
                                 <li>
                                     <a href="#national-data">National data</a>
                                 </li>
-                                <li>
-                                    <a href="#state-level-data">State-Level Data</a>
-                                </li>
-                                <li>
-                                <a href="#metropolitan-statistical-area">Metropolitan Statistical Area</a
-                                >
-                            </li>
-                            <li>
-                                <a href="#individual-agencies">Individual Agencies</a>
-                                <ol>
-                                    {% for agency_info in report.agencies %}
-                                        <li>
-                                            <a href="#{{ agency_info.title.lower()|replace(" ", "-") }}">{{ agency_info.title.title() }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ol>
-                            </li>
+                                {% if "state" in report %}
+                                    <li>
+                                        <a href="#state-level-data">State-Level Data</a>
+                                    </li>
+                                {% endif %}
+                                {% if "msa" in report %}
+                                    <li>
+                                        <a href="#metropolitan-statistical-area">Metropolitan Statistical Area</a>
+                                    </li>
+                                {% endif %}
+                                {% if "agency_comparison" in report %}
+                                    <li>
+                                        <a href="#agency-comparison">Agency Comparison</a>
+                                    </li>
+                                {% endif %}
+                                {% if report.agencies|length > 1 %}
+                                    <li>
+                                        <a href="#individual-agencies">Individual Agencies</a>
+                                        <ol>
+                                            {% for agency_info in report.agencies %}
+                                                <li>
+                                                    <a href="#{{ agency_info.title.lower()|replace(" ", "-") }}">{{ agency_info.title.title() }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ol>
+                                    </li>
+                                {% endif %}
                         </ol>
                     </li>
                 </ol>
@@ -293,34 +305,49 @@
             subtitle="In the U.S., the overall homicide clearance rate fell to just over 50% in 2021."
             ) }}
         </div>
-        <div id="state-level-data">
-            {{ detail_block(
-            "State-Level Data",
-            "the state",
-            report,
-            report.state
-            ) }}
-        </div>
-        <div id="metropolitan-statistical-area">
-            {{ detail_block(
-            "Metropolitan area",
-            report.msa.title,
-            report,
-            report.msa
-            ) }}
-        </div>
-        <div id="individual-agencies">
-            <h3>Individual Police Agencies</h3>
-            {% for agency_info in report.agencies %}
+        {% if "state" in report %}
+            <div id="state-level-data">
                 {{ detail_block(
-                agency_info.title.title(),
-                agency_info.title.title(),
+                "State-Level Data",
+                "the state",
                 report,
-                agency_info,
-                "h4"
+                report.state
                 ) }}
-            {% endfor %}
-        </div>
+            </div>
+        {% endif %}
+        {% if "msa" in report %}
+            <div id="metropolitan-statistical-area">
+                {{ detail_block(
+                "Metropolitan area",
+                report.msa.title,
+                report,
+                report.msa
+                ) }}
+            </div>
+        {% endif %}
+        {% if "agency_comparison" in report %}
+            <div id="agency-comparison">
+                <h3>Agency comparison</h3>
+                <p>
+                    <i>Click the column headers to sort</i>
+                </p>
+                {{ report.agency_comparison.interactive_table_html }}                
+            </di>
+        {% endif %}
+        {% if report.agencies|length > 1 %}
+            <div id="individual-agencies">
+                <h3>Individual Police Agencies</h3>
+                {% for agency_info in report.agencies %}
+                    {{ detail_block(
+                    agency_info.title.title(),
+                    agency_info.title.title(),
+                    report,
+                    agency_info,
+                    "h4"
+                    ) }}
+                {% endfor %}
+            </div>
+        {% endif %}
 </div>
 </div>
 </div>

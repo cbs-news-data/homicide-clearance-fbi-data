@@ -1,7 +1,7 @@
 Dallas Fort Worth:
   state_abbr: TX
   msa_name: Dallas-Fort Worth-Arlington, TX
-  core_agencies:
+  agencies:
     - ori_code: TXDPD0000
       ncic_agency_name: DALLAS POLICE DEPARTMENT
     - ori_code: TX2201200
@@ -10,7 +10,7 @@ Dallas Fort Worth:
 Los Angeles:
   state_abbr: CA
   msa_name: Los Angeles-Long Beach-Anaheim, CA
-  core_agencies:
+  agencies:
     - ori_code: CA0194200
       ncic_agency_name: LOS ANGELES PD
     - ori_code: CA0190000
@@ -19,7 +19,7 @@ Los Angeles:
 Sacramento:
   state_abbr: CA
   msa_name: Sacramento-Roseville-Folsom, CA
-  core_agencies:
+  agencies:
     - ori_code: CA0340400
       ncic_agency_name: SACRAMENTO PD
     - ori_code: CA0340000
@@ -28,7 +28,7 @@ Sacramento:
 San Francisco:
   state_abbr: CA
   msa_name: San Francisco-Oakland-Berkeley, CA
-  core_agencies:
+  agencies:
     - ori_code: CA0380100
       ncic_agency_name: SAN FRANCISCO PD
     - ori_code: CA0431300
@@ -39,14 +39,14 @@ San Francisco:
 Denver:
   state_abbr: CO
   msa_name: Denver-Aurora-Lakewood, CO
-  core_agencies:
+  agencies:
     - ori_code: CODPD0000
       ncic_agency_name: DENVER
 
 Miami:
   state_abbr: FL
   msa_name: Miami-Fort Lauderdale-Pompano Beach, FL
-  core_agencies:
+  agencies:
     - ori_code: FL0130600
       ncic_agency_name: MIAMI PD
     - ori_code: FL0130000
@@ -59,14 +59,14 @@ Miami:
 Boston:
   state_abbr: MA
   msa_name: Boston-Cambridge-Newton, MA-NH
-  core_agencies:
+  agencies:
     - ori_code: MA0130100
       ncic_agency_name: BOSTON PD
 
 Baltimore:
   state_abbr: MD
   msa_name: Baltimore-Columbia-Towson, MD
-  core_agencies:
+  agencies:
     - ori_code: MDBPD0000
       ncic_agency_name: BALTIMORE CITY PD
     - ori_code: MD0030100
@@ -75,20 +75,38 @@ Baltimore:
 Detroit:
   state_abbr: MI
   msa_name: Detroit-Warren-Dearborn, MI
-  core_agencies:
+  agencies:
     - ori_code: MI8234900
       ncic_agency_name: DETROIT PD
 
 Philadelphia:
   state_abbr: PA
   msa_name: Philadelphia-Camden-Wilmington, PA-NJ-DE-MD
-  core_agencies:
+  agencies:
     - ori_code: PAPEP0000
       ncic_agency_name: PHILADELPHIA POLICE DEPARTMENT POLICE ADMIN
 
 Pittsburgh:
   state_abbr: PA
   msa_name: Pittsburgh, PA
-  core_agencies:
+  agencies:
     - ori_code: PAPPD0000
       ncic_agency_name: PD PITTSBURGH
+
+National:
+  agency_comparison: true
+  agencies:
+    - ori_code: MI2539800
+      ncic_agency_name: FLINT PD
+    - ori_code: NM0010100
+      ncic_agency_name: ALBUQUERQUE PD
+    - ori_code: OHCLP0000
+      ncic_agency_name: CLEVELAND
+    - ori_code: GAAPD0000
+      ncic_agency_name: ATLANTA POLICE DEPARTMENT
+    - ori_code: CA0371100
+      ncic_agency_name: SAN DIEGO PD
+    - ori_code: TX2270100
+      ncic_agency_name: AUSTIN PD
+    - ori_code: NC0600100
+      ncic_agency_name: CHARLOTTE-MECKLENBURG POLICE DEPARTMENT

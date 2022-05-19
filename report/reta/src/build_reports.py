@@ -6,6 +6,7 @@ import re
 from textwrap import wrap
 import hvplot
 import jinja2
+import numpy as np
 import pandas as pd
 import yaml
 
@@ -53,6 +54,9 @@ def word_wrap_title(title):
     return "\n".join(wrap(title, 60))
 
 
+agencies = pd.read_csv("input/agencies.csv").query("data_year == 2020")[
+    ["ori", "state_abbr"]
+]
 agency = pd.read_csv("input/agency.csv")
 agency_latest = pd.read_csv("input/agency_latest.csv")
 agency_5yr = pd.read_csv("input/agency_5yr.csv")
@@ -89,8 +93,11 @@ class Report:
             r"\s{1,}", "_", self.market_name.lower().strip()
         )
 
-        self.market_data = markets[self.market_name]
-        self.data = {"national_clearance_rate": national_clearance_rate}
+        self.report_info = markets[self.market_name]
+        self.data = {
+            "national_clearance_rate": national_clearance_rate,
+            "nosummary": self.report_info.pop("nosummary", False),
+        }
         self.get_data()
 
     def __enter__(self):
@@ -108,29 +115,77 @@ class Report:
                 "market_name": self.market_name,
                 "generated_date": run_timestamp,
                 "national": get_single_data("national", "National", annual_only=True),
-                "state": get_single_data(
-                    "state",
-                    self.market_data["state_abbr"],
-                    state_abbr=self.market_data["state_abbr"],
-                ),
-                "msa": get_single_data(
-                    "msa",
-                    self.market_data["msa_name"],
-                    msa_name=self.market_data["msa_name"],
-                ),
-                "core_agencies": [],
+                "agencies": [],
             }
         )
 
-        # core agencies
-        for agency_info in self.market_data["core_agencies"]:
+        if "state_abbr" in self.report_info:
+            self.data.update(
+                {
+                    "state": get_single_data(
+                        "state",
+                        self.report_info["state_abbr"],
+                        state_abbr=self.report_info["state_abbr"],
+                    )
+                }
+            )
+
+        if "msa_name" in self.report_info:
+            self.data.update(
+                {
+                    "msa": get_single_data(
+                        "msa",
+                        self.report_info["msa_name"],
+                        msa_name=self.report_info["msa_name"],
+                    )
+                }
+            )
+
+        # agencies
+        for agency_info in self.report_info["agencies"]:
             adata = get_single_data(
                 "agency",
                 agency_info["ncic_agency_name"].title(),
                 ori_code=agency_info["ori_code"],
                 ncic_agency_name=agency_info["ncic_agency_name"],
             )
-            self.data["core_agencies"].append(adata)
+            self.data["agencies"].append(adata)
+
+        # optional agency comparison table
+        if (
+            "agency_comparison" in self.report_info
+            and self.report_info["agency_comparison"] is True
+        ):
+            cols = {
+                "ncic_agency_name": "Agency Name",
+                "state_abbr": "State",
+                "5_year_avg": "2015-2019 Average",
+                "latest": "2020",
+            }
+            self.data.update(
+                {
+                    "agency_comparison": {
+                        "interactive_table_html": get_hvplot_html(
+                            agency_5yr.merge(
+                                agencies,
+                                how="left",
+                                left_on="ori_code",
+                                right_on="ori",
+                                validate="1:1",
+                            )[list(cols.keys())]
+                            .set_index(["ncic_agency_name", "state_abbr"])
+                            .multiply(100)
+                            .round(1)
+                            .replace((np.inf, -np.inf), np.NaN)
+                            .dropna(subset=["5_year_avg"])
+                            .reset_index()
+                            .sort_values("latest")
+                            .rename(columns=cols)
+                            .plot(kind="table", height=500, backend="hvplot")
+                        )
+                    }
+                }
+            )
 
     def build_html_report(self):
         """builds an html report"""
@@ -217,8 +272,6 @@ def compare_to_national(num):
 
 def get_chart_html(df, title, label, national_compare=True):
     """runs dataframe.plot with styling and gets the svg text"""
-    string_io = StringIO()
-
     chart_df = df[["clearance_rate"]].rename(columns={"clearance_rate": label})
 
     if national_compare is True:
@@ -235,7 +288,13 @@ def get_chart_html(df, title, label, national_compare=True):
         backend="hvplot",
         rot=90,
     )
-    hvplot.save(chart, string_io)
+    return get_hvplot_html(chart)
+
+
+def get_hvplot_html(plot_output):
+    """returns the html output pandas.plot with backend='hvplot' as str"""
+    string_io = StringIO()
+    hvplot.save(plot_output, string_io)
     return string_io.getvalue()
 
 
