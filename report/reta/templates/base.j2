@@ -151,7 +151,7 @@
                                         <a href="#agency-comparison">Agency Comparison</a>
                                     </li>
                                 {% endif %}
-                                {% if report.agencies|length > 1 %}
+                                {% if report.agencies|length > 0 %}
                                     <li>
                                         <a href="#individual-agencies">Individual Agencies</a>
                                         <ol>
@@ -334,7 +334,7 @@
                 {{ report.agency_comparison.interactive_table_html }}                
             </di>
         {% endif %}
-        {% if report.agencies|length > 1 %}
+        {% if report.agencies|length > 0 %}
             <div id="individual-agencies">
                 <h3>Individual Police Agencies</h3>
                 {% for agency_info in report.agencies %}
