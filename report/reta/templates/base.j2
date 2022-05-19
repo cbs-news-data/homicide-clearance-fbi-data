@@ -103,8 +103,7 @@
         <div id="main">
             <div id="header-container">
                 <h1 id="report-title">
-                    Homicide Clearance Data Report for
-                    {{ report.market_name|replace("_", " ")|title }}
+                    {{ report.market_name|replace("_", " ")|title }} Homicide Clearance Data Report
                 </h1>
                 <div id="report-subtitle">
                     <span id="report-subtitle-text">
@@ -145,7 +144,7 @@
                             <li>
                                 <a href="#individual-agencies">Individual Agencies</a>
                                 <ol>
-                                    {% for agency_info in report.core_agencies %}
+                                    {% for agency_info in report.agencies %}
                                         <li>
                                             <a href="#{{ agency_info.title.lower()|replace(" ", "-") }}">{{ agency_info.title.title() }}</a>
                                         </li>
@@ -275,7 +274,7 @@
         <h2>Data</h2>
         <div id="summary">
             <h3>Summary</h3>
-            {% for agency_info in report.core_agencies %}
+            {% for agency_info in report.agencies %}
                 <p>
                     {{ trend_description(
                     agency_info.title.title(),
@@ -312,7 +311,7 @@
         </div>
         <div id="individual-agencies">
             <h3>Individual Police Agencies</h3>
-            {% for agency_info in report.core_agencies %}
+            {% for agency_info in report.agencies %}
                 {{ detail_block(
                 agency_info.title.title(),
                 agency_info.title.title(),
