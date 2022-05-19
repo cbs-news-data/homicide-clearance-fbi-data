@@ -15,6 +15,8 @@ Los Angeles:
       ncic_agency_name: LOS ANGELES PD
     - ori_code: CA0190000
       ncic_agency_name: LOS ANGELES CO SO LOS ANGELES
+    - ori_code: CA0191500
+      ncic_agency_name: COMPTON PD
 
 Sacramento:
   state_abbr: CA
@@ -22,8 +24,12 @@ Sacramento:
   agencies:
     - ori_code: CA0340400
       ncic_agency_name: SACRAMENTO PD
+    - ori_code: CA0390500
+      ncic_agency_name: STOCKTON PD
     - ori_code: CA0340000
       ncic_agency_name: SACRAMENTO CO SO SACRAMENTO
+    - ori_code: CA0390000
+      ncic_agency_name: SAN JOAQUIN CO SHERIFF'S OFFICE
 
 San Francisco:
   state_abbr: CA
@@ -102,6 +108,8 @@ National:
       ncic_agency_name: ALBUQUERQUE PD
     - ori_code: OHCLP0000
       ncic_agency_name: CLEVELAND
+    - ori_code: CA0191500
+      ncic_agency_name: COMPTON PD
     - ori_code: GAAPD0000
       ncic_agency_name: ATLANTA POLICE DEPARTMENT
     - ori_code: CA0371100

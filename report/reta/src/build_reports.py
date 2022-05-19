@@ -16,7 +16,7 @@ def get_data(df, column=None, index_col=None, single_value=True, **kwargs):
     query_string = []
     for kwarg, val in kwargs.items():
         if isinstance(val, str):
-            val_str = f"'{val}'"
+            val_str = f'"{val}"'
         else:
             val_str = f"{val}"
         query_string.append(f"({kwarg} == {val_str})")
