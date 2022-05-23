@@ -158,18 +158,6 @@ def drop_unrecognized_negative_value_entries(df):
     return df
 
 
-def coerce_dtype(df):
-    """sets the dtypes of each column defined in the DTYPES constant at the top of this module
-
-    Args:
-        df (pandas.DataFrame): dataframe to coerce
-
-    Returns:
-        pandas.DataFrame: dataframe with dtypes fixed
-    """
-    return df.astype(DTYPES)
-
-
 def drop_blank_rows(df):
     """drops all rows that are missing all index values
 
@@ -236,7 +224,7 @@ def do_transformation(df):
     # fill all NaN values with 0
     df["value"] = df.value.fillna(0)
     # coerce dtypes
-    df = coerce_dtype(df)
+    df = df.astype(DTYPES)
     # standardization
     df["ori_code"] = df.ori_code.apply(standardize_ori)
     # drop duplicates on all rows
