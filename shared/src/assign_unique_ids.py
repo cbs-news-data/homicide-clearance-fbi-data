@@ -13,7 +13,7 @@ def assign_unique_ids(df, *fieldnames):
     Returns:
         pandas.DataFrame: dataframe with unique ids set
     """
-    assert len(fieldnames) > 1, "You must provide at least one field"
+    assert len(fieldnames) > 0, "You must provide at least one field"
 
     df["unique_id"] = df.apply(
         lambda row: hashlib.sha1(
