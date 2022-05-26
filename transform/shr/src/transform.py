@@ -30,7 +30,7 @@ DTYPES = {
 }
 
 
-def drop_empty_rows(df):
+def drop_empty_rows(df, exclude_cols="id"):
     """drops completely empty rows
 
     Args:
@@ -39,9 +39,14 @@ def drop_empty_rows(df):
     Returns:
         pandas.DataFrame: dataframe with rows removed
     """
+    if isinstance(exclude_cols, (str, int, float)):
+        exclude_cols = [exclude_cols]
+
     orig_len = len(df)
     # drop if the only non-empty value is the id
-    df = df.dropna(how="all", subset=[c for c in df.columns if c != "id"]).copy()
+    df = df.dropna(
+        how="all", subset=[c for c in df.columns if c not in exclude_cols]
+    ).copy()
     dropped_rows = orig_len - len(df)
     if dropped_rows > 0:
         logging.info("Dropped %s blank rows", dropped_rows)
@@ -214,6 +219,8 @@ def do_transformation(df):
             # change necessary dtypes
             if filename in DTYPES:
                 out_df = out_df.astype(DTYPES[filename])
+
+            out_df = drop_empty_rows(out_df, ["incident_unique_id", "id"])
 
             out_df.to_csv(f"output/shr_{filename}.csv", index=False)
 
