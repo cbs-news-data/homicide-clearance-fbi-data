@@ -68,9 +68,16 @@ def bulk_create(lines, model, preprocessors=None, fk_pk_field=None, fk_model=Non
     model.objects.bulk_create(objs)
 
 
+def int_if_not_empty(val):
+    if str(val) == "":
+        return None
+
+    return int(float(val))
+
+
 def load_shr_incidents(lines):
     preprocessors = {
-        "year": lambda val: int(float(val)) if val != "" else val,
+        "year": int_if_not_empty,
         "last_update": lambda val: None if val == "" else val,
     }
     bulk_create(lines, models.SHRIncidents, preprocessors)
@@ -78,7 +85,7 @@ def load_shr_incidents(lines):
 
 def load_shr_offenders(lines):
     preprocessors = {
-        "offender_age": lambda age: None if age == "" else int(float(age)),
+        "offender_age": int_if_not_empty,
     }
     bulk_create(
         lines,
@@ -91,7 +98,8 @@ def load_shr_offenders(lines):
 
 def load_shr_victims(lines):
     preprocessors = {
-        "offender_age": lambda age: None if age == "" else int(float(age)),
+        "victim_age": int_if_not_empty,
+        "year": int_if_not_empty,
     }
     bulk_create(
         lines,
@@ -127,6 +135,6 @@ class Command(BaseCommand):
                     ),
                     desc=f"load {filename}",
                     total=guess_n_loops(filename, settings.CHUNKSIZE),
-                    leave=False,
+                    leave=True,
                 ):
                     loader(lines)

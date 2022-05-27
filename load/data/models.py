@@ -25,9 +25,10 @@ class Agencies(models.Model):
     unique_id = models.CharField(max_length=40, unique=True, primary_key=True)
     data_year = models.IntegerField(choices=[(i, i) for i in range(1960, 2021)])
     ori = models.CharField(max_length=9, validators=[validate_ori])
+    ucr_agency_name = models.CharField(max_length=50)
     ncic_agency_name = models.CharField(max_length=50)
     state_abbr = models.CharField(max_length=2)
-    population = models.IntegerField
+    population = models.IntegerField()
     county_name = models.CharField(max_length=50)
     msa_name = models.CharField(max_length=50)
     city_name = models.CharField(max_length=50)
@@ -66,14 +67,12 @@ class SHROffenders(models.Model):
 class SHRVictims(models.Model):
     """handles cleaned SHR Victim data"""
 
-    victim_unique_id = incident_unique_id = models.CharField(
-        max_length=40, unique=True, primary_key=True
-    )
+    victim_unique_id = models.CharField(max_length=40, unique=True, primary_key=True)
     incident = models.ForeignKey(to=SHRIncidents, on_delete=models.CASCADE)
     year = models.IntegerField()
     ori_code = models.CharField(max_length=9, validators=[validate_ori])
     victim_sequence = models.IntegerField(choices=[(i, i) for i in range(1, 13)])
-    victim_age = models.IntegerField()
-    victim_ethnicity = models.CharField(max_length=10)
-    victim_race = models.CharField(max_length=10)
-    victim_sex = models.CharField(max_length=10)
+    victim_age = models.IntegerField(null=True)
+    victim_ethnicity = models.CharField(max_length=10, null=True, blank=True)
+    victim_race = models.CharField(max_length=10, null=True, blank=True)
+    victim_sex = models.CharField(max_length=10, null=True, blank=True)
