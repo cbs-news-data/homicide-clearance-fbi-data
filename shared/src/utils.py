@@ -1,7 +1,8 @@
 """contains utility functions used across two or more python modules"""
 
-import re
 import math
+import os
+import re
 import yaml
 
 
@@ -65,3 +66,22 @@ def replace_vals_from_yaml(df, yaml_filename):
     df = df.replace({colname: replace_vals})
 
     return df
+
+
+def nb_run_from_command():
+    """checks whether code is being run interactively or from command line"""
+    # if both these directories exist, treat is as the correct directory
+    dirs = ["input", "output"]
+    if all(os.path.exists(d) for d in dirs):
+        return False
+
+    try:
+        shell = get_ipython().__class__.__name__  # type: ignore
+        if shell == "ZMQInteractiveShell":
+            return True
+        elif shell == "TerminalInteractiveShell":
+            return False
+        else:
+            return False
+    except NameError:
+        return False
