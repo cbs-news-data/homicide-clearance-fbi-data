@@ -134,8 +134,6 @@ def split_records(df, fieldname):
         )
         .query("value.notna()")
         .reset_index()
-        .pipe(assign_unique_ids, "index")
-        .rename(columns={"unique_id": f"{fieldname}_unique_id"})
         .drop("index", axis=1)
         .assign(
             **{
@@ -158,7 +156,6 @@ def split_records(df, fieldname):
         )
         .pivot(
             index=[
-                f"{fieldname}_unique_id",
                 "incident_unique_id",
                 "year",
                 "ori_code",
@@ -168,6 +165,14 @@ def split_records(df, fieldname):
             values="value",
         )
         .reset_index()
+        .pipe(
+            assign_unique_ids,
+            "incident_unique_id",
+            "year",
+            "ori_code",
+            f"{fieldname}_sequence",
+        )
+        .rename(columns={"unique_id": f"{fieldname}_unique_id"})
     )
     logging.info("Extracted %s %s records", len(field_df), fieldname)
     return field_df
