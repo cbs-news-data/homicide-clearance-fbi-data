@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from io import StringIO
+import os
 import re
 from textwrap import wrap
 import hvplot
@@ -54,28 +55,8 @@ def word_wrap_title(title):
     return "\n".join(wrap(title, 60))
 
 
-agencies = pd.read_csv("input/agencies.csv").query("data_year == 2020")[
-    ["ori", "state_abbr"]
-]
-agency = pd.read_csv("input/agency.csv")
-agency_latest = pd.read_csv("input/agency_latest.csv")
-agency_5yr = pd.read_csv("input/agency_5yr.csv")
-msa = pd.read_csv("input/msa.csv")
-msa_latest = pd.read_csv("input/msa_latest.csv")
-msa_5yr = pd.read_csv("input/msa_5yr.csv")
-national = pd.read_csv("input/national.csv")
-state = pd.read_csv("input/state.csv")
-state_latest = pd.read_csv("input/state_latest.csv")
-state_5yr = pd.read_csv("input/state_5yr.csv")
-
 with open("hand/markets.yaml", "r", encoding="utf-8") as file:
     markets = yaml.load(file, Loader=yaml.CLoader)
-
-run_timestamp = datetime.now().strftime("%Y-%m-%d at %H:%M %p")
-
-national_clearance_rate = format_pct(get_data(national, "clearance_rate", year=2020))
-
-national = national.set_index("year")
 
 
 class Report:
@@ -88,6 +69,15 @@ class Report:
         )
         self.template = env.get_template("base.j2")
 
+        self.run_timestamp = datetime.now().strftime("%Y-%m-%d at %H:%M %p")
+
+        self.load_csv_files()
+
+        self.national_clearance_rate = format_pct(
+            get_data(self.reta_national, "clearance_rate", year=2020)
+        )
+        self.reta_national = self.reta_national.set_index("year")
+
         self.market_name = market_name
         self.market_name_snake_case = re.sub(
             r"\s{1,}", "_", self.market_name.lower().strip()
@@ -95,7 +85,7 @@ class Report:
 
         self.report_info = markets[self.market_name]
         self.data = {
-            "national_clearance_rate": national_clearance_rate,
+            "national_clearance_rate": self.national_clearance_rate,
             "nosummary": self.report_info.pop("nosummary", False),
         }
         self.get_data()
@@ -107,23 +97,39 @@ class Report:
     def __exit__(self, *args, **kwargs):
         pass
 
+    def load_csv_files(self):
+        """reads csv files and attaches to self"""
+
+        for filename in os.listdir("input"):
+            attrname = os.path.basename(filename).split(".")[0]
+            self.__dict__[attrname] = pd.read_csv(f"input/{filename}", low_memory=False)
+
+        # do this manually
+        self.agencies = pd.read_csv("input/agencies.csv").query("data_year == 2020")[
+            ["ori", "state_abbr"]
+        ]
+
     def get_data(self):
         """populates data for a report"""
 
         self.data.update(
             {
                 "market_name": self.market_name,
-                "generated_date": run_timestamp,
-                "national": get_single_data("national", "National", annual_only=True),
-                "agencies": [],
+                "generated_date": self.run_timestamp,
+                "reta": {
+                    "national": self.get_single_data(
+                        "reta_national", "National", annual_only=True
+                    ),
+                    "agencies": [],
+                },
             }
         )
 
         if "state_abbr" in self.report_info:
-            self.data.update(
+            self.data["reta"].update(
                 {
-                    "state": get_single_data(
-                        "state",
+                    "state": self.get_single_data(
+                        "reta_state",
                         self.report_info["state_abbr"],
                         state_abbr=self.report_info["state_abbr"],
                     )
@@ -131,10 +137,10 @@ class Report:
             )
 
         if "msa_name" in self.report_info:
-            self.data.update(
+            self.data["reta"].update(
                 {
-                    "msa": get_single_data(
-                        "msa",
+                    "msa": self.get_single_data(
+                        "reta_msa",
                         self.report_info["msa_name"],
                         msa_name=self.report_info["msa_name"],
                     )
@@ -143,13 +149,13 @@ class Report:
 
         # agencies
         for agency_info in self.report_info["agencies"]:
-            adata = get_single_data(
-                "agency",
+            adata = self.get_single_data(
+                "reta_agency",
                 agency_info["ncic_agency_name"].title(),
                 ori_code=agency_info["ori_code"],
                 ncic_agency_name=agency_info["ncic_agency_name"],
             )
-            self.data["agencies"].append(adata)
+            self.data["reta"]["agencies"].append(adata)
 
         # optional agency comparison table
         if (
@@ -162,12 +168,12 @@ class Report:
                 "5_year_avg": "2015-2019 Average",
                 "latest": "2020",
             }
-            self.data.update(
+            self.data["reta"].update(
                 {
                     "agency_comparison": {
                         "interactive_table_html": get_hvplot_html(
-                            agency_5yr.merge(
-                                agencies,
+                            self.reta_agency_5yr.merge(
+                                self.agencies,
                                 how="left",
                                 left_on="ori_code",
                                 right_on="ori",
@@ -198,97 +204,99 @@ class Report:
         ) as outfile:
             outfile.write(html)
 
+    def get_single_data(self, geography, title, annual_only=False, **selectors):
+        """gets a dictionary containing the data needed to populate the template
 
-def get_single_data(geography, title, annual_only=False, **selectors):
-    """gets a dictionary containing the data needed to populate the template
+        Args:
+            geography (str): type of geography to use
+            title (str): title of data
 
-    Args:
-        geography (str): type of geography to use
-        title (str): title of data
+        Returns:
+            dict: dict of template data
+        """
+        df_annual = getattr(self, geography)
+        if not annual_only:
+            df_latest = getattr(self, f"{geography}_latest")
+            df_5yr = getattr(self, f"{geography}_5yr")
 
-    Returns:
-        dict: dict of template data
-    """
-    df_annual = globals()[geography]
-    if not annual_only:
-        df_latest = globals()[f"{geography}_latest"]
-        df_5yr = globals()[f"{geography}_5yr"]
-
-    data = {
-        "title": title,
-        "annual_chart_svg": get_chart_html(
-            get_data(
-                df=df_annual,
-                index_col="year",
-                single_value=False,
-                **selectors,
+        data = {
+            "title": title,
+            "annual_chart_svg": self.get_chart_html(
+                get_data(
+                    df=df_annual,
+                    index_col="year",
+                    single_value=False,
+                    **selectors,
+                ),
+                title=f"{title} Homicide Clearance Rate",
+                label=title,
+                national_compare=not annual_only,
             ),
-            title=f"{title} Homicide Clearance Rate",
-            label=title,
-            national_compare=not annual_only,
-        ),
-        "annual_table_html": get_table_html(
-            get_data(df=df_annual, index_col="year", single_value=False, **selectors),
-            columns=["Actual", "Cleared", "Clearance Rate"],
-        ),
-    }
+            "annual_table_html": get_table_html(
+                get_data(
+                    df=df_annual, index_col="year", single_value=False, **selectors
+                ),
+                columns=["Actual", "Cleared", "Clearance Rate"],
+            ),
+        }
 
-    if not annual_only:
-        data.update(
-            {
-                "annual_only": False,
-                "max_complete_year": get_data(
-                    df_latest, column="latest_year", single_value=True, **selectors
-                ),
-                "clearance_rate_latest": format_pct(
-                    get_data(df=df_latest, column="clearance_rate", **selectors)
-                ),
-                "clearance_rate_latest_change": format_pct(
-                    get_data(df=df_5yr, column="change", **selectors)
-                ),
-            }
-        )
-        data["compared_to_national"] = compare_to_national(
-            data["clearance_rate_latest"]
-        )
-        data["comparison_chart_html"] = get_table_html(
-            get_data(
-                df=df_5yr.rename(columns={"5_year_avg": "5-Year Average"}),
-                index_col=list(selectors.keys()),
-                single_value=False,
-                **selectors,
+        if not annual_only:
+            data.update(
+                {
+                    "annual_only": False,
+                    "max_complete_year": get_data(
+                        df_latest, column="latest_year", single_value=True, **selectors
+                    ),
+                    "clearance_rate_latest": format_pct(
+                        get_data(df=df_latest, column="clearance_rate", **selectors)
+                    ),
+                    "clearance_rate_latest_change": format_pct(
+                        get_data(df=df_5yr, column="change", **selectors)
+                    ),
+                }
             )
+            data["compared_to_national"] = compare_to_national(
+                data["clearance_rate_latest"], self.national_clearance_rate
+            )
+            data["comparison_chart_html"] = get_table_html(
+                get_data(
+                    df=df_5yr.rename(columns={"5_year_avg": "5-Year Average"}),
+                    index_col=list(selectors.keys()),
+                    single_value=False,
+                    **selectors,
+                )
+            )
+        else:
+            data.update({"max_complete_year": 2020, "annual_only": True})
+
+        return data
+
+    def get_chart_html(self, df, title, label, national_compare=True):
+        """runs dataframe.plot with styling and gets the svg text"""
+        chart_df = df[["clearance_rate"]].rename(columns={"clearance_rate": label})
+
+        if national_compare is True:
+            chart_df = chart_df.join(
+                self.reta_national[["clearance_rate"]].rename(
+                    columns={"clearance_rate": "national"}
+                )
+            )
+
+        chart = chart_df.multiply(100).plot(
+            title=word_wrap_title(title),
+            height=500,
+            legend="top",
+            xlabel="Year",
+            ylabel="Clearance rate",
+            backend="hvplot",
+            rot=90,
         )
-    else:
-        data.update({"max_complete_year": 2020, "annual_only": True})
-
-    return data
+        return get_hvplot_html(chart)
 
 
-def compare_to_national(num):
+def compare_to_national(num, national):
     """gets percentage difference compared to national value"""
-    return format_pct((num - national_clearance_rate) / national_clearance_rate)
-
-
-def get_chart_html(df, title, label, national_compare=True):
-    """runs dataframe.plot with styling and gets the svg text"""
-    chart_df = df[["clearance_rate"]].rename(columns={"clearance_rate": label})
-
-    if national_compare is True:
-        chart_df = chart_df.join(
-            national[["clearance_rate"]].rename(columns={"clearance_rate": "national"})
-        )
-
-    chart = chart_df.multiply(100).plot(
-        title=word_wrap_title(title),
-        height=500,
-        legend="top",
-        xlabel="Year",
-        ylabel="Clearance rate",
-        backend="hvplot",
-        rot=90,
-    )
-    return get_hvplot_html(chart)
+    return format_pct((num - national) / national)
 
 
 def get_hvplot_html(plot_output):

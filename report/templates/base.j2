@@ -151,11 +151,11 @@
                                         <a href="#agency-comparison">Agency Comparison</a>
                                     </li>
                                 {% endif %}
-                                {% if report.agencies|length > 0 %}
+                                {% if report.reta.agencies|length > 0 %}
                                     <li>
                                         <a href="#individual-agencies">Individual Agencies</a>
                                         <ol>
-                                            {% for agency_info in report.agencies %}
+                                            {% for agency_info in report.reta.agencies %}
                                                 <li>
                                                     <a href="#{{ agency_info.title.lower()|replace(" ", "-") }}">{{ agency_info.title.title() }}</a>
                                                 </li>
@@ -286,7 +286,7 @@
         <h2>Data</h2>
         <div id="summary">
             <h3>Summary</h3>
-            {% for agency_info in report.agencies %}
+            {% for agency_info in report.reta.agencies %}
                 <p>
                     {{ trend_description(
                     agency_info.title.title(),
@@ -301,7 +301,7 @@
             "National Data",
             "the U.S.",
             report,
-            report.national,
+            report.reta.national,
             subtitle="In the U.S., the overall homicide clearance rate fell to just over 50% in 2021."
             ) }}
         </div>
@@ -311,7 +311,7 @@
                 "State-Level Data",
                 "the state",
                 report,
-                report.state
+                report.reta.state
                 ) }}
             </div>
         {% endif %}
@@ -319,9 +319,9 @@
             <div id="metropolitan-statistical-area">
                 {{ detail_block(
                 "Metropolitan area",
-                report.msa.title,
+                report.reta.msa.title,
                 report,
-                report.msa
+                report.reta.msa
                 ) }}
             </div>
         {% endif %}
@@ -331,13 +331,13 @@
                 <p>
                     <i>Click the column headers to sort</i>
                 </p>
-                {{ report.agency_comparison.interactive_table_html }}                
+                {{ report.reta.agency_comparison.interactive_table_html }}                
             </di>
         {% endif %}
-        {% if report.agencies|length > 0 %}
+        {% if report.reta.agencies|length > 0 %}
             <div id="individual-agencies">
                 <h3>Individual Police Agencies</h3>
-                {% for agency_info in report.agencies %}
+                {% for agency_info in report.reta.agencies %}
                     {{ detail_block(
                     agency_info.title.title(),
                     agency_info.title.title(),
