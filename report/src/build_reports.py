@@ -51,6 +51,18 @@ def format_pct(pct):
     return round(pct * 100, 1)
 
 
+def format_excel_sheet(df, writer, sheet_index):
+    """sets excel percent format for shr outputs and auto-fits columns"""
+    pct_format = writer.book.add_format({"num_format": "0.0%"})
+    sheet = writer.book.worksheets()[sheet_index]
+    for i in range(len(df.columns)):
+        if i < 2:
+            continue
+
+        col_width = len(df.columns[i]) + 3
+        sheet.set_column(i, i, col_width, pct_format)
+
+
 def word_wrap_title(title):
     """accomodates long titles by breaking at 60 characters"""
     return "\n".join(wrap(title, 60))
@@ -109,6 +121,47 @@ class Report:
         self.agencies = pd.read_csv("input/agencies.csv").query("data_year == 2020")[
             ["ori", "state_abbr"]
         ]
+
+    def write_local_shr_data(self):
+        write_args = {"index": False}
+        sheet_index = 0
+
+        if "state_abbr" not in self.report_info:
+            return
+
+        with pd.ExcelWriter(
+            f"output/shr/clearance_demographics_{self.market_name}.xlsx",
+            engine="xlsxwriter",
+        ) as writer:
+            self.shr_state.pipe(
+                query_dataframe,
+                single_value=False,
+                state_abbr=self.report_info["state_abbr"],
+            ).to_excel(
+                writer,
+                sheet_name=self.report_info["state_abbr"]
+                if len(self.report_info["state_abbr"]) < 31
+                else self.report_info["state_abbr"][:31],
+                **write_args,
+            )
+
+            format_excel_sheet(self.shr_state, writer, sheet_index)
+            sheet_index += 1
+
+            for agency_info in self.report_info["agencies"]:
+                self.shr_agency.pipe(
+                    query_dataframe,
+                    single_value=False,
+                    ori_code=agency_info["ori_code"],
+                ).to_excel(
+                    writer,
+                    sheet_name=agency_info["ncic_agency_name"]
+                    if len(agency_info["ncic_agency_name"]) < 31
+                    else agency_info["ncic_agency_name"][:31],
+                    **write_args,
+                )
+                format_excel_sheet(self.shr_agency, writer, sheet_index)
+                sheet_index += 1
 
     def get_data(self):
         """populates data for a report"""
@@ -197,9 +250,11 @@ class Report:
     def build_html_report(self):
         """builds an html report"""
 
+        self.write_local_shr_data()
+
         html = self.template.render(report=self.data)
         with open(
-            f"output/clearance_rate_{self.market_name_snake_case}.html",
+            f"output/reta/clearance_rate_{self.market_name_snake_case}.html",
             "w",
             encoding="utf-8",
         ) as outfile:
