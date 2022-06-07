@@ -277,7 +277,7 @@ class Report:
 
         data = {
             "title": title,
-            "annual_chart_html": self.get_chart_html(
+            "annual_chart_html": self.build_chart(
                 query_dataframe(
                     df=df_annual,
                     index_col="year",
@@ -329,7 +329,7 @@ class Report:
 
         return data
 
-    def get_chart_html(self, df, title, label, national_compare=True):
+    def build_chart(self, df, title, label, national_compare=True):
         """runs dataframe.plot with styling and gets the html"""
         chart_df = df[["clearance_rate"]].rename(columns={"clearance_rate": label})
 
@@ -352,13 +352,19 @@ class Report:
         }
 
         chart = chart_df.plot(height=500, backend="hvplot", **chart_args)
+
         # also output as svg
+        svgdir = f"output/svgs/{self.market_name}"
+        if not os.path.exists(svgdir):
+            os.mkdir(svgdir)
+
         chart_df.plot(
             figsize=(15, 12),
             ylim=(0, 100),
             **chart_args,
-        ).get_figure().savefig(f"output/svgs/{title}.svg")
+        ).get_figure().savefig(f"{svgdir}/{title}.svg")
         plt.close("all")
+
         return get_hvplot_html(chart)
 
 

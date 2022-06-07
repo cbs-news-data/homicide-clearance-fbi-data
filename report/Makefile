@@ -5,5 +5,5 @@ all:
 
 clean:
 	rm -f output/*.html
-	rm -f output/svgs/*.svg
+	rm -f output/svgs/*/*.svg
 	rm -f output/shr/*.xlsx
