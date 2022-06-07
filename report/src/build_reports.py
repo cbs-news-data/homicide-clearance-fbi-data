@@ -358,9 +358,10 @@ class Report:
         if not os.path.exists(svgdir):
             os.mkdir(svgdir)
 
+        max_val = chart_df[label].max()
         chart_df.plot(
             figsize=(15, 12),
-            ylim=(0, 100),
+            ylim=(0, 100 if max_val <= 100 else max_val),
             **chart_args,
         ).get_figure().savefig(f"{svgdir}/{title}.svg")
         plt.close("all")
