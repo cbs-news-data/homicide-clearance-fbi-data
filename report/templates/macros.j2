@@ -28,7 +28,7 @@
     {% else %}
         <p>{{ subtitle }}</p>
     {% endif %}
-    <div class="chart-wrapper">{{ data.annual_chart_svg }}</div>
+    <div class="chart-wrapper">{{ data.annual_chart_html }}</div>
     {% if data.annual_only == false %}
         <div class="table-wrapper">{{ data.comparison_chart_html }}</div>
     {% endif %}

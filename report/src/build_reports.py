@@ -277,7 +277,7 @@ class Report:
 
         data = {
             "title": title,
-            "annual_chart_svg": self.get_chart_html(
+            "annual_chart_html": self.get_chart_html(
                 query_dataframe(
                     df=df_annual,
                     index_col="year",
@@ -330,7 +330,7 @@ class Report:
         return data
 
     def get_chart_html(self, df, title, label, national_compare=True):
-        """runs dataframe.plot with styling and gets the svg text"""
+        """runs dataframe.plot with styling and gets the html"""
         chart_df = df[["clearance_rate"]].rename(columns={"clearance_rate": label})
 
         if national_compare is True:
