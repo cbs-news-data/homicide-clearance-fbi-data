@@ -7,6 +7,7 @@ import re
 from textwrap import wrap
 import hvplot
 import jinja2
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
@@ -282,15 +283,25 @@ class Report:
                 )
             )
 
-        chart = chart_df.multiply(100).plot(
-            title=word_wrap_title(title),
-            height=500,
-            legend="top",
-            xlabel="Year",
-            ylabel="Clearance rate",
-            backend="hvplot",
-            rot=90,
-        )
+        chart_df = chart_df.multiply(100)
+
+        # shared arguments used for svg and html chart generation
+        chart_args = {
+            "title": word_wrap_title(title),
+            "legend": "top",
+            "xlabel": "Year",
+            "ylabel": "Clearance rate",
+            "rot": 90,
+        }
+
+        chart = chart_df.plot(height=500, backend="hvplot", **chart_args)
+        # also output as svg
+        chart_df.plot(
+            figsize=(15, 12),
+            ylim=(0, 100),
+            **chart_args,
+        ).get_figure().savefig(f"output/svgs/{title}.svg")
+        plt.close("all")
         return get_hvplot_html(chart)
 
 

@@ -4,4 +4,5 @@ all:
 	python src/build_reports.py
 
 clean:
-	rm -f output/*
+	rm -f output/*.html
+	rm -f output/svgs/*.svg
