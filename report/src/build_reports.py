@@ -13,7 +13,7 @@ import pandas as pd
 import yaml
 
 
-def get_data(df, column=None, index_col=None, single_value=True, **kwargs):
+def query_dataframe(df, column=None, index_col=None, single_value=True, **kwargs):
     """filters a dataframe based on kwargs and returns column from the resulting row"""
     query_string = []
     for kwarg, val in kwargs.items():
@@ -75,7 +75,7 @@ class Report:
         self.load_csv_files()
 
         self.national_clearance_rate = format_pct(
-            get_data(self.reta_national, "clearance_rate", year=2020)
+            query_dataframe(self.reta_national, "clearance_rate", year=2020)
         )
         self.reta_national = self.reta_national.set_index("year")
 
@@ -223,7 +223,7 @@ class Report:
         data = {
             "title": title,
             "annual_chart_svg": self.get_chart_html(
-                get_data(
+                query_dataframe(
                     df=df_annual,
                     index_col="year",
                     single_value=False,
@@ -234,7 +234,7 @@ class Report:
                 national_compare=not annual_only,
             ),
             "annual_table_html": get_table_html(
-                get_data(
+                query_dataframe(
                     df=df_annual, index_col="year", single_value=False, **selectors
                 ),
                 columns=["Actual", "Cleared", "Clearance Rate"],
@@ -245,14 +245,16 @@ class Report:
             data.update(
                 {
                     "annual_only": False,
-                    "max_complete_year": get_data(
+                    "max_complete_year": query_dataframe(
                         df_latest, column="latest_year", single_value=True, **selectors
                     ),
                     "clearance_rate_latest": format_pct(
-                        get_data(df=df_latest, column="clearance_rate", **selectors)
+                        query_dataframe(
+                            df=df_latest, column="clearance_rate", **selectors
+                        )
                     ),
                     "clearance_rate_latest_change": format_pct(
-                        get_data(df=df_5yr, column="change", **selectors)
+                        query_dataframe(df=df_5yr, column="change", **selectors)
                     ),
                 }
             )
@@ -260,7 +262,7 @@ class Report:
                 data["clearance_rate_latest"], self.national_clearance_rate
             )
             data["comparison_chart_html"] = get_table_html(
-                get_data(
+                query_dataframe(
                     df=df_5yr.rename(columns={"5_year_avg": "5-Year Average"}),
                     index_col=list(selectors.keys()),
                     single_value=False,
