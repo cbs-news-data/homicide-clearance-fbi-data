@@ -99,6 +99,13 @@ Pittsburgh:
     - ori_code: PAPPD0000
       ncic_agency_name: PD PITTSBURGH
 
+New York:
+  state_abbr: NY
+  agencies:
+    - ori_code: NY0303000
+      ncic_agency_name: NEW YORK CITY PD NEW YORK
+  no_reta: true
+
 National:
   agency_comparison: true
   agencies:

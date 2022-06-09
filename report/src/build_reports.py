@@ -101,10 +101,15 @@ class Report:
             "national_clearance_rate": self.national_clearance_rate,
             "nosummary": self.report_info.pop("nosummary", False),
         }
-        self.get_data()
+
+        self.no_reta = (
+            "no_reta" in self.report_info and self.report_info["no_reta"] is True
+        )
+
+        if self.no_reta is False:
+            self.get_data()
 
     def __enter__(self):
-        self.get_data()
         return self
 
     def __exit__(self, *args, **kwargs):
@@ -252,13 +257,14 @@ class Report:
 
         self.write_local_shr_data()
 
-        html = self.template.render(report=self.data)
-        with open(
-            f"output/reta/clearance_rate_{self.market_name_snake_case}.html",
-            "w",
-            encoding="utf-8",
-        ) as outfile:
-            outfile.write(html)
+        if self.no_reta is False:
+            html = self.template.render(report=self.data)
+            with open(
+                f"output/reta/clearance_rate_{self.market_name_snake_case}.html",
+                "w",
+                encoding="utf-8",
+            ) as outfile:
+                outfile.write(html)
 
     def get_single_data(self, geography, title, annual_only=False, **selectors):
         """gets a dictionary containing the data needed to populate the template
