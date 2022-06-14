@@ -106,6 +106,13 @@ New York:
       ncic_agency_name: NEW YORK CITY PD NEW YORK
   no_reta: true
 
+Minneapolis:
+  state_abbr: MN
+  agencies:
+    - ori_code: MN0271100
+      ncic_agency_name: MINNEAPOLIS PD
+  no_reta: true
+
 National:
   agency_comparison: true
   agencies:
