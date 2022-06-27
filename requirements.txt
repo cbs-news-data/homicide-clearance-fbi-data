@@ -1,5 +1,6 @@
 black
 csvkit
+datawrapper
 Django
 hvplot
 Jinja2
