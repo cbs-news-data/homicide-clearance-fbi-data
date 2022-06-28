@@ -1,22 +1,24 @@
 # CBS News analysis of FBI homicide data
 
-This repository contains the code for CBS News' 2022 analysis of FBI data related to homicide clearance rates in the US. It includes all files used in this analysis, including code, documentation, and data files. 
+This repository contains the code for CBS News' 2022 analysis of FBI data related to homicide clearance rates in the US. It includes all files used in this analysis, including code, documentation, and data files.
 
 ## Project Structure
 
-This repository uses [Make](https://www.gnu.org/software/make/) to create a workflow that can be easily reproduced with a single command. 
+This repository uses [Make](https://www.gnu.org/software/make/) to create a workflow that can be easily reproduced with a single command.
 
 ### Tasks
 
 The project is divided into tasks, each of which is contained in its own directory:
 
-| Task folder             | Description                                                  |
-| ----------------------- | ------------------------------------------------------------ |
-| [Extract](extract/)     | Turns the raw annual fixed-width files from the FBI into single csv files. |
-| [Transform](transform/) | Cleans the outputs of  extract tasks                         |
-| [Load](load/)           | Loads the outputs of transformations into a database using Django |
+| Task folder             | Description                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------ |
+| [Extract](extract/)     | Turns the raw annual fixed-width files from the FBI into single csv files.     |
+| [Transform](transform/) | Cleans the outputs of extract tasks                                            |
+| [Merge](merge/)         | Merges any files before loading them                                           |
+| [Load](load/)           | Loads the outputs of transformations into a database using Django              |
+| [Report](report/)       | Generates reports using Jinja, which are sent to each individual local station |
 
-*View the README file in each task folder for additional documentation of that task.*
+_View the README file in each task folder for additional documentation of that task._
 
 ### [Raw Data](raw/)
 
@@ -30,11 +32,11 @@ make raw
 
 This runs a series of commands in the [root Makefile](Makefile) that initializes your virtual environment, installs all python dependencies, and downloads the input files to the appropriate folder in [raw/](raw/).
 
-*NOTE: these files are very large and this can take over an hour depending on your internet speed*
+_NOTE: these files are very large and this can take over an hour depending on your internet speed_
 
 ### [Scripts](scripts/)
 
-The python files in [scripts/](scripts/) are used to run various stages of the workflow, for example downloading the raw data files. 
+The python files in [scripts/](scripts/) are used to run various stages of the workflow, for example downloading the raw data files.
 
 ### [Documents](documents/)
 
@@ -42,7 +44,7 @@ The python files in [scripts/](scripts/) are used to run various stages of the w
 
 ## How to reproduce
 
-*NOTE: This was created using Linux and uses Linux tools, so it will not work from windows unless you run it using [wsl](https://docs.microsoft.com/en-us/windows/wsl/about).*
+_NOTE: This was created using Linux and uses Linux tools, so it will not work from windows unless you run it using [wsl](https://docs.microsoft.com/en-us/windows/wsl/about)._
 
 1. Clone this repository.
 2. Run the steps to download the raw data as described above.
